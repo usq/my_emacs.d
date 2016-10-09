@@ -4,3 +4,4 @@ elpa/
 *.el~
 /ido.last
 /ido.last~
+backups/
