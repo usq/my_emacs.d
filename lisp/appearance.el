@@ -4,6 +4,7 @@
 
 ;;highlight current line
 (global-hl-line-mode t)
+
 (blink-cursor-mode -1)
 (setq visible-bell nil)
 
