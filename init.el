@@ -27,6 +27,7 @@
 		    ))
 
 (require 'setup-ido)
+(require 'setup-magit)
 
 (global-set-key (kbd "C-x m") 'magit-status)
 (global-set-key (kbd "M-x") 'smex)

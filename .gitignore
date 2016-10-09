@@ -3,3 +3,4 @@ elpa/
 .el~
 *.el~
 /ido.last
+/ido.last~
