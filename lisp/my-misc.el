@@ -1,6 +1,5 @@
 
 
-
 (defun add-format-json-to-js2-mode () (define-key js2-mode-map (kbd "C-x TAB") 'json-format))
 (add-hook 'js2-mode-hook 'add-format-json-to-js2-mode)
 

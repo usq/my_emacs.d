@@ -44,7 +44,14 @@
   ("C-x u" . undo-tree-visualize))
 
 (use-package flx)
-(use-package flx-ido)
+(use-package flx-ido
+  :ensure t
+  :init
+  (setq ido-use-faces nil)
+  :config
+  (flx-ido-mode 1))
+
+
 (use-package ido-vertical-mode)
 (use-package ido-at-point)
 (use-package ido-ubiquitous)
@@ -70,6 +77,9 @@
 
 (use-package reveal-in-osx-finder)
 
+(use-package js2-mode
+  :bind
+  (("C-c [tab]" . json-format)))
 
 
 (require 'appearance)
@@ -81,7 +91,4 @@
 (require 'keybindings)
 (require 'my-misc)
 (require 'djinni-mode)
-
-
-
 

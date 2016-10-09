@@ -7,6 +7,7 @@
 (require 'ido-vertical-mode)
 (ido-vertical-mode)
 
+
 (defun sd/ido-define-keys () ;; C-n/p is more intuitive in vertical layout
   (define-key ido-completion-map (kbd "C-n") 'ido-next-match)
   (define-key ido-completion-map (kbd "<down>") 'ido-next-match)
