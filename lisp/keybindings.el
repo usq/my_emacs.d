@@ -10,11 +10,5 @@
 (global-set-key (kbd "<s-up>") 'windmove-up)
 (global-set-key (kbd "<s-down>") 'windmove-down)
 
-(define-key global-map (kbd "C-c j") 'ace-jump-mode)
-
-;; Magit
-(global-set-key (kbd "C-x m") 'magit-status)
-(autoload 'magit-status "magit")
-
 
 (provide 'keybindings)
