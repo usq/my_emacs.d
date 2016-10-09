@@ -14,7 +14,8 @@
 (when (not (package-installed-p 'use-package))
   (package-install 'use-package))
 (setq use-package-always-ensure t)
-;;;;;;;;;;;;;;; end bootstrapping
+
+;;;;;;;;;;;;;;; end bootstrapping ;;;;;;;;;;;;;;;
 
 (require 'mac)
 (require 'tex)
@@ -61,6 +62,8 @@
    ("M-X" . smex-major-mode-commands)))
   
 (use-package ace-jump-mode
+  :config
+  (setq ace-jump-mode-case-fold -1)
   :bind
   (("C-." . ace-jump-mode)
    ("C-c j" . ace-jump-mode)))
@@ -95,12 +98,17 @@
 ;;look at workgroups
 ;;https://github.com/pashinin/workgroups2
 
-
 ;;look at helm
 ;;https://emacs-helm.github.io/helm/#introduction
-;;(use-package helm
-;;  :ensure t
-;;  :config
-;;  (progn
-;;    (require 'helm-config)
-;;    (helm-mode 1)))
+(use-package helm
+  :ensure t
+  :bind
+  ("C-c o" . helm-occur)
+  :config
+  (progn
+    (require 'helm-config)
+    (helm-mode 1)
+    (setq helm-locate-fuzzy-match t
+	  helm-apropos-fuzzy-match t)))
+
+;;(helm-command-prefix)
