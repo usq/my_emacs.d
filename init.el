@@ -2,17 +2,22 @@
 
 (setq message-log-max 10000)
 
-
 (add-to-list 'load-path (concat user-emacs-directory "lisp/"))
+
 (setq custom-file (expand-file-name "custom.el" (concat user-emacs-directory "lisp/")))
 (load custom-file)
 
 (setq load-prefer-newer t)
-(setq use-package-always-ensure t)
+
 (require 'packages)
-(packages-install '(
-		    use-package
-		    ))
+
+(when (not (package-installed-p 'use-package))
+  (package-install 'use-package))
+(setq use-package-always-ensure t)
+;;; end bootstrapping
+
+
+(use-package dash)
 
 (use-package magit
   :bind

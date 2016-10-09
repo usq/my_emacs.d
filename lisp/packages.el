@@ -13,24 +13,10 @@
         ("MELPA"        . 0))
       )
 
-
 (package-initialize)
 
 (unless (file-exists-p "~/.emacs.d/elpa/archives/melpa")
   (package-refresh-contents))
-
-
-(when (not (package-installed-p 'dash))
-  (package-install 'dash))
-(require 'dash)
-
-(defun packages-install (packages)
-  (--each packages
-    (when (not (package-installed-p it))
-      (package-install it)))
-  (delete-other-windows))
-
-
 
 
 (provide 'packages)
