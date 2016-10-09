@@ -23,7 +23,10 @@
   :bind
   ("C-x m" . magit-status))
 
-(use-package paredit)
+(use-package paredit
+  :mode ("\\.el\\" . paredit-mode))
+
+
 (use-package flx)
 (use-package flx-ido)
 (use-package ido-vertical-mode)
