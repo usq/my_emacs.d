@@ -10,4 +10,6 @@
 ;;no visible bell
 (setq visible-bell nil)
 
+
+(load-theme 'monokai)
 (provide 'appearance)
