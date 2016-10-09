@@ -16,8 +16,4 @@
 
 
 
-
-
-(load-theme 'monokai)
-
 (provide 'appearance)
