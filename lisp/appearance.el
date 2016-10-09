@@ -15,5 +15,14 @@
 (if (fboundp 'scroll-bar-mode) (scroll-bar-mode -1))
 
 
+(setq
+   backup-by-copying t      ; don't clobber symlinks
+   backup-directory-alist
+    '(("." . "~/.emacs.d/backups/saves"))    ; don't litter my fs tree
+   delete-old-versions t
+   kept-new-versions 6
+   kept-old-versions 2
+   version-control -1)       ; dont use versioned backups
+
 
 (provide 'appearance)

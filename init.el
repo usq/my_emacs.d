@@ -23,9 +23,17 @@
   :bind
   ("C-x m" . magit-status))
 
-(use-package paredit
-  :mode ("\\.el\\" . paredit-mode))
 
+(use-package paredit
+  :diminish paredit-mode
+  :init
+  (add-hook 'clojure-mode-hook 'enable-paredit-mode)
+  (add-hook 'cider-repl-mode-hook 'enable-paredit-mode)
+  (add-hook 'lisp-mode-hook 'enable-paredit-mode)
+  (add-hook 'emacs-lisp-mode-hook 'enable-paredit-mode)
+  (add-hook 'lisp-interaction-mode-hook 'enable-paredit-mode)
+  (add-hook 'ielm-mode-hook 'enable-paredit-mode)
+  (add-hook 'json-mode-hook 'enable-paredit-mode))
 
 (use-package flx)
 (use-package flx-ido)
@@ -53,6 +61,11 @@
 (use-package restclient)
 (use-package simple-httpd)
 
+
+(use-package reveal-in-osx-finder)
+
+
+
 (require 'mac)
 (require 'appearance)
 
@@ -60,3 +73,6 @@
 (require 'setup-magit)
 (require 'keybindings)
 (require 'my-misc)
+
+
+

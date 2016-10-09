@@ -3,7 +3,7 @@
 
 (defun show-in-finder ()
   (interactive)
-  (reveal-in-finder))
+  (reveal-in-osx-finder))
 
 (defun tum-address ()
   (interactive)
