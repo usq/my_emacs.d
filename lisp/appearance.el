@@ -26,4 +26,8 @@
    version-control -1)       ; dont use versioned backups
 
 
+(desktop-save-mode 1)
+
 (provide 'appearance)
+
+
