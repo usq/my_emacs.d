@@ -24,7 +24,11 @@
 (use-package ido-vertical-mode)
 (use-package ido-at-point)
 (use-package ido-ubiquitous)
-(use-package smex)
+(use-package smex
+  :bind
+  (("M-x" . smex)
+   ("M-X" . smex-major-mode-commands)))
+  
 
 (use-package ace-jump-mode
   :bind
@@ -41,10 +45,10 @@
 (use-package restclient)
 (use-package simple-httpd)
 
-
 (require 'mac)
 (require 'appearance)
 
 (require 'setup-ido)
 (require 'setup-magit)
 (require 'keybindings)
+(require 'my-misc)
