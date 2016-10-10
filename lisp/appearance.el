@@ -26,7 +26,13 @@
    version-control -1)       ; dont use versioned backups
 
 
+;;override selected text
+(delete-selection-mode 1)
+
 (desktop-save-mode 1)
+
+(setq show-paren-delay 0.125)
+(show-paren-mode 1)
 
 (provide 'appearance)
 

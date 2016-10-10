@@ -7,3 +7,5 @@ elpa/
 backups/
 /.emacs.desktop
 /.emacs.desktop.lock
+/eshell/history
+/eshell/lastdir

@@ -17,14 +17,31 @@
 
 ;;;;;;;;;;;;;;; end bootstrapping ;;;;;;;;;;;;;;;
 
-(require 'mac)
-(require 'tex)
-
 (use-package dash)
+
+(use-package browse-kill-ring
+  :bind
+  ("C-c y" . browse-kill-ring))
 
 (use-package magit
   :bind
   ("C-x m" . magit-status))
+
+(use-package ibuffer
+  :bind
+  ("C-x C-b" . ibuffer))
+
+(use-package multiple-cursors
+  :bind
+  ("H-SPC" . set-rectangular-region-anchor))
+
+(use-package swift-mode)
+(use-package yasnippet)
+(use-package company)
+(use-package company-sourcekit
+  :config
+  (add-to-list 'company-backends 'company-sourcekit))
+
 
 (use-package paredit
   :diminish paredit-mode
@@ -35,7 +52,6 @@
   (add-hook 'emacs-lisp-mode-hook 'enable-paredit-mode)
   (add-hook 'lisp-interaction-mode-hook 'enable-paredit-mode)
   (add-hook 'json-mode-hook 'enable-paredit-mode))
-
 
 (use-package auctex-latexmk)
 
@@ -50,8 +66,6 @@
   (setq ido-use-faces nil)
   :config
   (flx-ido-mode 1))
-
-
 
 (use-package ido-vertical-mode)
 (use-package ido-at-point)
@@ -84,6 +98,8 @@
   :bind
   (("C-c [tab]" . json-format)))
 
+(require 'mac)
+(require 'tex)
 
 (require 'appearance)
 

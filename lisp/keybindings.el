@@ -5,6 +5,7 @@
 (global-set-key (kbd "C-c (") 'start-kbd-macro)
 (global-set-key (kbd "C-c )") 'end-kbd-macro)
 
+(global-set-key (kbd "C-c /") 'comment-or-uncomment-region)
 
 (provide 'keybindings)
 
