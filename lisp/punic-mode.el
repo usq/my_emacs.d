@@ -15,7 +15,6 @@
             (,event-regexp . font-lock-function-name-face)
             (,comments-regexp . font-lock-comment-face)
             (,keywords-regexp . font-lock-keyword-face)
-
             ))))
 
 (define-derived-mode punic-mode fundamental-mode
@@ -41,9 +40,10 @@ fSelect formula:")
 	 (sha (second (reverse (split-string sha-256))))
 	 (tarball-name (car (last (split-string tarball-file "/"))))
 	 (version (replace-regexp-in-string  ".tar.gz" ""
-					     (replace-regexp-in-string "punic_" "" tarball-name))))    	 (with-temp-buffer
-	   (insert (punic-rb version sha))
-	   (write-file formula-file))))
+					     (replace-regexp-in-string "punic_" "" tarball-name))))
+    (with-temp-buffer
+      (insert (punic-rb version sha))
+      (write-file formula-file))))
 
 (defun punic-rb (version sha)
   "returns a brew formula with version and sha inserted"
