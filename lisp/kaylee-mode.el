@@ -1,7 +1,7 @@
-(setq punic-font-lock-keywords
+(setq kaylee-font-lock-keywords
       (let (
-            (keywords '("punic"))
-            (types '(":asset" ":punichook" ":framework"))
+            (keywords '("kaylee"))
+            (types '(":asset" ":kayleehook" ":framework"))
             )
 
         (let (
@@ -17,19 +17,19 @@
             (,keywords-regexp . font-lock-keyword-face)
             ))))
 
-(define-derived-mode punic-mode fundamental-mode
-  "punic mode"
+(define-derived-mode kaylee-mode fundamental-mode
+  "kaylee mode"
   ;; code for syntax highlighting
-  (setq font-lock-defaults '((punic-font-lock-keywords))))
+  (setq font-lock-defaults '((kaylee-font-lock-keywords))))
 
 
 
 
 (defun kaylee-create-brew-tarball (folder-name version)
-  (interactive "DSelect punic folder to tarball:
-MSpecify punic version (i.e. 0.0.13):")
+  (interactive "DSelect kaylee folder to tarball:
+MSpecify kaylee version (i.e. 0.0.13):")
   
-  (let* ((tarball-name (concat  "punic_" version ".tar.gz "))
+  (let* ((tarball-name (concat  "kaylee_" version ".tar.gz "))
 	 (tarball-command (concat "tar " "czf " tarball-name " " folder-name)))
     (message "tarballing...")
 ;;    (message tarball-command)
@@ -45,9 +45,10 @@ MSpecify punic version (i.e. 0.0.13):")
   (let* ((~sha-256 tarball-file)
 	 (tarball-name (file-name-nondirectory tarball-file))
 	 (version (replace-regexp-in-string  ".tar.gz" ""
-					     (replace-regexp-in-string "punic_" "" tarball-name))))
+					     (replace-regexp-in-string "kaylee_" "" tarball-name))))
+    (message "here")
     (with-temp-buffer
-      (insert (punic-rb version sha))
+      (insert (~kaylee-rb version sha))
       (write-file formula-file))))
 
 (defun ~sha-256 (file)
@@ -60,7 +61,7 @@ MSpecify punic version (i.e. 0.0.13):")
 (defun ~kaylee-tarball? (file)
   (let* ((file-name (file-name-nondirectory file))
 	 (components (split-string file-name "\\.")))
-    (last-n-eq-to-p components `("tar" "gz"))))
+    (~last-n-eq-to-p components `("tar" "gz"))))
 
 (defun ~last-n-eq-to-p (list-to-check should-be-equal-to)
   (equalp
@@ -68,10 +69,10 @@ MSpecify punic version (i.e. 0.0.13):")
 	       list-to-check)
    should-be-equal-to))
 
-(~sha-256 "~/dev/QM/frameworks/punic/www/public/releases/punic_0.0.13.tar.gz")
+;;(~sha-256 "~/dev/QM/frameworks/kaylee/www/public/releases/kaylee_0.0.13.tar.gz")
 
 
-(defun kaylee-rb (version sha)
+(defun ~kaylee-rb (version sha)
   "returns a brew formula with version and sha inserted"
   (concat  "class Kaylee < Formula
    desc \"\"

@@ -37,11 +37,9 @@
 
 (use-package swift-mode)
 (use-package yasnippet)
-(use-package company)
-(use-package company-sourcekit
-  :config
-  (add-to-list 'company-backends 'company-sourcekit))
-
+(use-package company
+  :bind
+  ("C-," . company-complete-common))
 
 (use-package paredit
   :diminish paredit-mode
@@ -110,6 +108,7 @@
 (require 'keybindings)
 (require 'my-misc)
 (require 'djinni-mode)
+(require 'kaylee-mode)
 
 ;;look at workgroups
 ;;https://github.com/pashinin/workgroups2
@@ -128,3 +127,12 @@
 	  helm-apropos-fuzzy-match t)))
 
 ;;(helm-command-prefix)
+
+;;flyspell mode
+(defun flyspell-switch-dictionary()
+  (interactive)
+  (let* ((dic ispell-current-dictionary)
+         (change (if (string= dic "deutsch8") "english" "deutsch8")))
+    (ispell-change-dictionary change)
+    (message "Dictionary switched from %s to %s" dic change)
+    ))

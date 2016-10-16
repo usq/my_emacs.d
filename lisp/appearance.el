@@ -34,6 +34,8 @@
 (setq show-paren-delay 0.125)
 (show-paren-mode 1)
 
+(setq ns-pop-up-frames nil)
+
 (provide 'appearance)
 
 

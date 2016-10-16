@@ -9,3 +9,4 @@ backups/
 /.emacs.desktop.lock
 /eshell/history
 /eshell/lastdir
+/lisp/keep.el
