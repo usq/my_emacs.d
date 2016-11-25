@@ -36,10 +36,14 @@
   ("H-SPC" . set-rectangular-region-anchor))
 
 (use-package swift-mode)
+(use-package scala-mode)
+
 (use-package yasnippet)
 (use-package company
   :bind
-  ("C-," . company-complete-common))
+  ("C-," . company-complete-common)
+  :init
+  (add-hook 'after-init-hook 'global-company-mode))
 
 (use-package paredit
   :diminish paredit-mode
@@ -82,6 +86,12 @@
 
 (use-package smartparens)
 (use-package direx)
+(use-package dirtree)
+(use-package exec-path-from-shell
+  :init (exec-path-from-shell-initialize))
+(use-package flycheck
+  :ensure t
+  :init (global-flycheck-mode))
 
 (use-package monokai-theme
   :config
@@ -89,12 +99,25 @@
 
 (use-package restclient)
 (use-package simple-httpd)
+(use-package cmake-mode)
 
 (use-package reveal-in-osx-finder)
+
+(use-package exec-path-from-shell
+  :config
+ (exec-path-from-shell-initialize))
 
 (use-package js2-mode
   :bind
   (("C-c [tab]" . json-format)))
+
+(use-package markdown-mode
+  :ensure t
+  :commands (markdown-mode gfm-mode)
+  :mode (("README\\.md\\'" . gfm-mode)
+         ("\\.md\\'" . markdown-mode)
+         ("\\.markdown\\'" . markdown-mode))
+  :init (setq markdown-command "multimarkdown"))
 
 (require 'mac)
 (require 'tex)
@@ -106,9 +129,11 @@
 (require 'setup-latex)
 
 (require 'keybindings)
-(require 'my-misc)
 (require 'djinni-mode)
 (require 'kaylee-mode)
+
+
+
 
 ;;look at workgroups
 ;;https://github.com/pashinin/workgroups2
@@ -136,3 +161,8 @@
     (ispell-change-dictionary change)
     (message "Dictionary switched from %s to %s" dic change)
     ))
+
+
+(put 'upcase-region 'disabled nil)
+
+(require 'my-misc)

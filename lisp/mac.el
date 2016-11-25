@@ -1,7 +1,10 @@
 
-(setq mac-option-modifier 'super)
+
 (setq mac-command-modifier 'meta)
 (setq ns-function-modifier 'hyper)
+
+;;umlaute please!
+(setq mac-option-modifier nil)
 
 
 (setq delete-by-moving-to-trash t
