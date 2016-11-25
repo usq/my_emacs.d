@@ -72,5 +72,46 @@ MStartValue: ")
   (interactive)
   (message "Walter-Gropius-Straße 17, 80807 München"))
 
+(add-to-list 'auto-mode-alist '("Catalyzer" . kaylee-mode))
+(add-to-list 'auto-mode-alist '("Catalyzer.override" . kaylee-mode))
+(add-to-list 'auto-mode-alist '("Catalyzer.source" . kaylee-mode))
+(add-to-list 'auto-mode-alist '("Catalyzer.fixed" . kaylee-mode))
+
+
+(defun print-shell-variable ()
+  (interactive)
+  (let* ((var (thing-at-point 'symbol))
+	 (echo (concat "echo \"" var ": ${" var "}\"")))
+    (end-of-line)
+    (newline)
+    (insert echo)))
+
+;; (defun -to_ ()
+;;   (interactive)
+;;   (replace-string "-" "_" )
+
+(defun rename-file-and-buffer ()
+  "Rename the current buffer and file it is visiting."
+  (interactive)
+  (let ((filename (buffer-file-name)))
+    (if (not (and filename (file-exists-p filename)))
+        (message "Buffer is not visiting a file!")
+      (let ((new-name (read-file-name "New name: " filename)))
+        (cond
+         ((vc-backend filename) (vc-rename-file filename new-name))
+         (t
+          (rename-file filename new-name t)
+          (set-visited-file-name new-name t t)))))))
+
+(defun gittower ()
+  (interactive)
+  (shell-command "gittower ."))
+
+(defun pwdyank ()
+  (interactive)
+  (let* ((pwd (pwd)))
+    (kill-new (replace-regexp-in-string "Directory " "" pwd))))
+
+
 (provide 'my-misc)
 
