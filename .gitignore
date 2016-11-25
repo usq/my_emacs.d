@@ -10,3 +10,5 @@ backups/
 /eshell/history
 /eshell/lastdir
 /lisp/keep.el
+/.mc-lists.el
+/network-security.data
