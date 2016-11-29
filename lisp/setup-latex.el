@@ -1,3 +1,8 @@
+;;; package --- setup for latex
+;;; Commentary:
+
+;;; Code:
+
 (setq TeX-auto-save t)
 (setq TeX-parse-self t)
 (setq-default TeX-master nil)
@@ -10,7 +15,7 @@
 
 (setenv "PATH"
         (concat
-         "/usr/local/texlive/2016basic/bin/x86_64-darwin" ":"
+         "/Library/TeX/texbin" ":"
 
          (getenv "PATH")))
 
