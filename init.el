@@ -165,3 +165,4 @@
 (put 'upcase-region 'disabled nil)
 
 (require 'my-misc)
+(require 'mite)

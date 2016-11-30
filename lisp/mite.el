@@ -61,18 +61,19 @@
 
 
 (defun all-repo-history (root-path from to)
-  (interactive "DrootPath: 
-sfromDate:
-stoDate:")
+  (interactive "DrootPath:  
+sfromDate: 
+stoDate: ")
   (with-output-to-temp-buffer "log"
-    (princ 
+    (princ
      (let ((repositories (repos-in-path root-path)))
-       (loop for rep in repositories
-	     collect (extr-git-history rep "Michael Conrads" from to))
+       (remove-if 'string-empty-p 
+		  (loop for rep in repositories
+			collect (extr-git-history rep "Michael Conrads" from to)))
        ))))
 
-;;(all-repo-history "~/dev/QM/frameworks" "2016-10-25" "2016-10-26")
 
+;(all-repo-history "~/dev/QM/frameworks" "2016-11-29" "2016-11-30")
 
 
 (provide 'mite)
