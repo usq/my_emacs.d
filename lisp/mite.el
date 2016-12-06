@@ -1,6 +1,9 @@
 
 ;;; Code:
-(require 'cl)
+(require 'cl-lib)
+
+(defun hello(x &key a b)
+    (list x a b))
 
 (defun join-path (components)
   "Joins COMPONENTS with /."
@@ -48,10 +51,10 @@
 (defun extr-git-history (path author since until)
   (let* ((default-directory path)
 	 (git-log-string (concat "git log "
-				 " --format=\"%aD: %s\"" 
+				 " --format=\"%aD: %s\""
 				 " --author=\"" author "\""
 				 " --since=\"" since "\""
-				 " --until=\"" until "\"" 
+				 " --until=\"" until "\""
 				 ))
 	 (res (shell-command-to-string git-log-string)))
     (if  (> (length res)
@@ -69,11 +72,12 @@ stoDate: ")
      (let ((repositories (repos-in-path root-path)))
        (remove-if 'string-empty-p 
 		  (loop for rep in repositories
+
 			collect (extr-git-history rep "Michael Conrads" from to)))
        ))))
 
 
-;(all-repo-history "~/dev/QM/frameworks" "2016-11-29" "2016-11-30")
+;(all-repo-history "~/dev/QM/frameworks" "2016-11-30" "2016-12-01")
 
 
 (provide 'mite)

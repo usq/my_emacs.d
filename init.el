@@ -15,9 +15,26 @@
   (package-install 'use-package))
 (setq use-package-always-ensure t)
 
+(package-refresh-contents)
+
 ;;;;;;;;;;;;;;; end bootstrapping ;;;;;;;;;;;;;;;
 
 (use-package dash)
+(use-package sgml-mode)
+(use-package hideshow
+  :config
+  (add-to-list 'hs-special-modes-alist
+	       '(nxml-mode
+		 "<!--\\|<[^/>]*[^/]>"
+		 "-->\\|</[^/>]*[^/]>"
+
+		 "<!--"
+		 sgml-skip-tag-forward
+		 nil))
+  :init
+  (add-hook 'nxml-mode-hook 'hs-minor-mode)
+  :bind
+  ("C-c h" . hs-toggle-hiding))
 
 (use-package browse-kill-ring
   :bind
@@ -150,7 +167,9 @@
     (setq helm-locate-fuzzy-match t
 	  helm-apropos-fuzzy-match t)))
 
-;;(helm-command-prefix)
+;;clojure
+(use-package cider)
+
 
 ;;flyspell mode
 (defun flyspell-switch-dictionary()
@@ -163,6 +182,12 @@
 
 
 (put 'upcase-region 'disabled nil)
+(setq python-shell-interpreter "python" )
+;(setq python-shell-interpreter "path\to\your\python3.2")
+;(autoload 'python-mode "python-mode" "Python Mode." t)
+;(add-to-list 'auto-mode-alist '("\\.py\\'" . python-mode))
+;(add-to-list 'interpreter-mode-alist '("python" . python-mode))
+
 
 (require 'my-misc)
 (require 'mite)
