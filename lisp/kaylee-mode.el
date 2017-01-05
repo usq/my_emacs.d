@@ -36,21 +36,36 @@
   (interactive)
   (_execKayleeShell "kaylee fix"))
 
+(defun kaylee-info (platform fw)
+  (interactive
+   "Mplatform: 
+Mframework: ")
+  (_execKayleeShell (concat "kaylee info " platform " " fw)))
+
+
+(defun kaylee-fix-override ()
+  (interactive)
+  (_execKayleeShell "kaylee fix --override"))
+
 (defun kaylee-maintain ()
   (interactive)
   (_execKayleeShell "kaylee maintain"))
 
 (defun kaylee-force-maintain ()
   (interactive)
-  (_execKayleeShell "kaylee force-maintain"))
+  (_execKayleeShell "kaylee maintain --force"))
 
 (defun kaylee-init-app ()
   (interactive)
-  (_execKayleeShell "kaylee init-app"))
+  (_execKayleeShell "kaylee init app"))
 
 (defun kaylee-init-framework ()
   (interactive)
-  (_execKayleeShell "kaylee init-framework"))
+  (_execKayleeShell "kaylee init framework"))
+
+(defun kaylee-start-local-www ()
+  (interactive) 
+  )
 
 (defun _execKayleeShell (arg)
   (if (get-buffer "*kaylee-output*")

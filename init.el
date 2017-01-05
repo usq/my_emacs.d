@@ -1,3 +1,6 @@
+;;; package --- Summary
+;;; Commentary:
+;;; Code:
 (package-initialize)
 
 (setq message-log-max 10000)
@@ -19,7 +22,11 @@
 
 ;;;;;;;;;;;;;;; end bootstrapping ;;;;;;;;;;;;;;;
 
+(use-package exec-path-from-shell
+  :init (exec-path-from-shell-initialize))
+
 (use-package dash)
+(use-package google-this)
 (use-package sgml-mode)
 (use-package hideshow
   :config
@@ -56,11 +63,17 @@
 (use-package scala-mode)
 
 (use-package yasnippet)
+
 (use-package company
   :bind
   ("C-," . company-complete-common)
-  :init
+  :config
   (add-hook 'after-init-hook 'global-company-mode))
+
+(use-package company-jedi
+  :config
+  (add-to-list 'company-backends 'company-jedi)
+  (add-hook 'python-mode-hook 'my/python-mode-hook))
 
 (use-package paredit
   :diminish paredit-mode
@@ -104,8 +117,7 @@
 (use-package smartparens)
 (use-package direx)
 (use-package dirtree)
-(use-package exec-path-from-shell
-  :init (exec-path-from-shell-initialize))
+
 (use-package flycheck
   :ensure t
   :init (global-flycheck-mode))
@@ -136,6 +148,68 @@
          ("\\.markdown\\'" . markdown-mode))
   :init (setq markdown-command "multimarkdown"))
 
+(use-package org
+  :ensure t        ; But it comes with Emacs now!?
+  :init
+  (setq org-use-speed-commands t
+        org-return-follows-link t
+        org-hide-emphasis-markers t
+        org-completion-use-ido t
+        org-outline-path-complete-in-steps nil
+        org-src-fontify-natively t   ;; Pretty code blocks
+        org-src-tab-acts-natively t
+        org-confirm-babel-evaluate nil
+        org-todo-keywords '((sequence "TODO(t)" "DOING(g)" "|" "DONE(d)")
+                            (sequence "|" "CANCELED(c)")))
+  (add-to-list 'auto-mode-alist '("\\.txt\\'" . org-mode))
+  (add-to-list 'auto-mode-alist '(".*/[0-9]*$" . org-mode))   ;; Journal entries
+  :bind (("C-c l" . org-store-link)
+         ("C-c c" . org-capture)
+         ("C-M-|" . indent-rigidly))
+  :config
+  (unbind-key "C-c +" org-mode-map)
+  (unbind-key "C-c -" org-mode-map)
+  (font-lock-add-keywords            ; A bit silly but my headers are now
+   'org-mode `(("^\\*+ \\(TODO\\) "  ; shorter, and that is nice canceled
+                (1 (progn (compose-region (match-beginning 1) (match-end 1) "⚑")
+                          nil)))
+               ("^\\*+ \\(DOING\\) "
+                (1 (progn (compose-region (match-beginning 1) (match-end 1) "⚐")
+                          nil)))
+               ("^\\*+ \\(CANCELED\\) "
+                (1 (progn (compose-region (match-beginning 1) (match-end 1) "✘")
+                          nil)))
+               ("^\\*+ \\(DONE\\) "
+                (1 (progn (compose-region (match-beginning 1) (match-end 1) "✔")
+                          nil)))))
+
+  (define-key org-mode-map (kbd "M-C-n") 'org-end-of-item-list)
+  (define-key org-mode-map (kbd "M-C-p") 'org-beginning-of-item-list)
+  (define-key org-mode-map (kbd "M-C-u") 'outline-up-heading)
+  (define-key org-mode-map (kbd "M-C-w") 'org-table-copy-region)
+  (define-key org-mode-map (kbd "M-C-y") 'org-table-paste-rectangle)
+
+  (define-key org-mode-map [remap org-return] (lambda () (interactive)
+                                                (if (org-in-src-block-p)
+                                                    (org-return)
+                                                  (org-return-indent)))))
+
+(org-babel-do-load-languages
+ 'org-babel-load-languages
+ '(
+   (sh . t)
+   (python . t)
+   (dot . t)
+   ))
+
+;; Make windmove work in org-mode:
+(add-hook 'org-shiftup-final-hook 'windmove-up)
+(add-hook 'org-shiftleft-final-hook 'windmove-left)
+(add-hook 'org-shiftdown-final-hook 'windmove-down)
+(add-hook 'org-shiftright-final-hook 'windmove-right)
+
+(use-package projectile)
+
 (require 'mac)
 (require 'tex)
 
@@ -149,8 +223,10 @@
 (require 'djinni-mode)
 (require 'kaylee-mode)
 
-
-
+(use-package powerline
+  :ensure t
+  :config
+  (powerline-default-theme))
 
 ;;look at workgroups
 ;;https://github.com/pashinin/workgroups2
@@ -170,7 +246,6 @@
 ;;clojure
 (use-package cider)
 
-
 ;;flyspell mode
 (defun flyspell-switch-dictionary()
   (interactive)
@@ -179,7 +254,6 @@
     (ispell-change-dictionary change)
     (message "Dictionary switched from %s to %s" dic change)
     ))
-
 
 (put 'upcase-region 'disabled nil)
 (setq python-shell-interpreter "python" )
@@ -191,3 +265,4 @@
 
 (require 'my-misc)
 (require 'mite)
+

@@ -77,7 +77,7 @@ stoDate: ")
        ))))
 
 
-;(all-repo-history "~/dev/QM/frameworks" "2016-11-30" "2016-12-01")
+;;(all-repo-history "~/dev/QM/" "2016-12-01" "2016-12-24")
 
 
 (provide 'mite)

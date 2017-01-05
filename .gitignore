@@ -14,3 +14,5 @@ backups/
 network-security.data
 .DS_Store
 /smex-items
+.python-environments/
+/url

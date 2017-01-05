@@ -1,4 +1,6 @@
-
+;;; Package --- Summary
+;;; Commentary:
+;;; Code:
 (global-set-key (kbd "C-x r q") 'save-buffers-kill-terminal)
 (windmove-default-keybindings) ;; Shift+direction
 
@@ -7,6 +9,16 @@
 
 (global-set-key (kbd "C-c /") 'comment-or-uncomment-region)
 
+(global-set-key (kbd "C-c +") (lambda ()
+				(interactive)
+				(enlarge-window 5)))
+
+(global-set-key (kbd "C-c -") (lambda ()
+				(interactive)
+				(shrink-window 5)))
+
+
 (provide 'keybindings)
+;;; keybindings.el ends here
 
 
