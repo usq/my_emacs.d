@@ -4,7 +4,6 @@
 (package-initialize)
 
 (setq message-log-max 10000)
-
 (add-to-list 'load-path (concat user-emacs-directory "lisp/"))
 
 (setq custom-file (expand-file-name "custom.el" (concat user-emacs-directory "lisp/")))
@@ -60,7 +59,6 @@
   ("H-SPC" . set-rectangular-region-anchor))
 
 (use-package swift-mode)
-(use-package scala-mode)
 
 (use-package yasnippet)
 
@@ -106,7 +104,7 @@
   :bind
   (("M-x" . smex)
    ("M-X" . smex-major-mode-commands)))
-  
+
 (use-package ace-jump-mode
   :config
   (setq ace-jump-mode-case-fold -1)
@@ -120,11 +118,17 @@
 
 (use-package flycheck
   :ensure t
-  :init (global-flycheck-mode))
-
-(use-package monokai-theme
+  :init (global-flycheck-mode)
   :config
-  (load-theme 'monokai))
+  (unbind-key "C-c +" \-mode-map))
+
+;; (use-package monokai-theme
+;;   :config
+;;   (load-theme 'monokai))
+
+(use-package  color-theme-sanityinc-tomorrow
+  :config
+  (color-theme-sanityinc-tomorrow-night))
 
 (use-package restclient)
 (use-package simple-httpd)
@@ -134,7 +138,7 @@
 
 (use-package exec-path-from-shell
   :config
- (exec-path-from-shell-initialize))
+  (exec-path-from-shell-initialize))
 
 (use-package js2-mode
   :bind
@@ -162,11 +166,12 @@
         org-todo-keywords '((sequence "TODO(t)" "DOING(g)" "|" "DONE(d)")
                             (sequence "|" "CANCELED(c)")))
   (add-to-list 'auto-mode-alist '("\\.txt\\'" . org-mode))
-  (add-to-list 'auto-mode-alist '(".*/[0-9]*$" . org-mode))   ;; Journal entries
-  :bind (("C-c l" . org-store-link)
-         ("C-c c" . org-capture)
-         ("C-M-|" . indent-rigidly))
+  
+  :bind
+  (("C-c l" . org-store-link)
+   ("C-c c" . org-capture))
   :config
+  ;; we use C-c + for org-mode-map
   (unbind-key "C-c +" org-mode-map)
   (unbind-key "C-c -" org-mode-map)
   (font-lock-add-keywords            ; A bit silly but my headers are now
@@ -183,45 +188,24 @@
                 (1 (progn (compose-region (match-beginning 1) (match-end 1) "✔")
                           nil)))))
 
-  (define-key org-mode-map (kbd "M-C-n") 'org-end-of-item-list)
-  (define-key org-mode-map (kbd "M-C-p") 'org-beginning-of-item-list)
-  (define-key org-mode-map (kbd "M-C-u") 'outline-up-heading)
-  (define-key org-mode-map (kbd "M-C-w") 'org-table-copy-region)
-  (define-key org-mode-map (kbd "M-C-y") 'org-table-paste-rectangle)
-
   (define-key org-mode-map [remap org-return] (lambda () (interactive)
                                                 (if (org-in-src-block-p)
                                                     (org-return)
-                                                  (org-return-indent)))))
+                                                  (org-return-indent))))
+  (org-babel-do-load-languages
+   'org-babel-load-languages
+   '((sh . t)
+     (python . t)
+     (dot . t)
+     ))
 
-(org-babel-do-load-languages
- 'org-babel-load-languages
- '(
-   (sh . t)
-   (python . t)
-   (dot . t)
-   ))
-
-;; Make windmove work in org-mode:
-(add-hook 'org-shiftup-final-hook 'windmove-up)
-(add-hook 'org-shiftleft-final-hook 'windmove-left)
-(add-hook 'org-shiftdown-final-hook 'windmove-down)
-(add-hook 'org-shiftright-final-hook 'windmove-right)
+  ;; Make windmove work in org-mode:
+  (add-hook 'org-shiftup-final-hook 'windmove-up)
+  (add-hook 'org-shiftleft-final-hook 'windmove-left)
+  (add-hook 'org-shiftdown-final-hook 'windmove-down)
+  (add-hook 'org-shiftright-final-hook 'windmove-right))
 
 (use-package projectile)
-
-(require 'mac)
-(require 'tex)
-
-(require 'appearance)
-
-(require 'setup-ido)
-(require 'setup-magit)
-(require 'setup-latex)
-
-(require 'keybindings)
-(require 'djinni-mode)
-(require 'kaylee-mode)
 
 (use-package powerline
   :ensure t
@@ -246,23 +230,23 @@
 ;;clojure
 (use-package cider)
 
-;;flyspell mode
-(defun flyspell-switch-dictionary()
-  (interactive)
-  (let* ((dic ispell-current-dictionary)
-         (change (if (string= dic "deutsch8") "english" "deutsch8")))
-    (ispell-change-dictionary change)
-    (message "Dictionary switched from %s to %s" dic change)
-    ))
+(require 'mac)
+(require 'tex)
 
-(put 'upcase-region 'disabled nil)
-(setq python-shell-interpreter "python" )
-;(setq python-shell-interpreter "path\to\your\python3.2")
-;(autoload 'python-mode "python-mode" "Python Mode." t)
-;(add-to-list 'auto-mode-alist '("\\.py\\'" . python-mode))
-;(add-to-list 'interpreter-mode-alist '("python" . python-mode))
+(require 'appearance)
+
+(require 'setup-ido)
+(require 'setup-magit)
+(require 'setup-latex)
+
+(require 'keybindings)
+(require 'djinni-mode)
+(require 'kaylee-mode)
 
 
 (require 'my-misc)
 (require 'mite)
+
+;;; init.el ends here
+
 
