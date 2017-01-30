@@ -5,7 +5,7 @@
 
         (let (
               (keywords-regexp  (regexp-opt keywords 'words))
-              (fw-pf-regexp      "^\\([a-zA-Z-]+\\) +\\([a-zA-Z-]+\\) +\\(src:\\|~>\\|==\\) *\\([.a-zA-Z0-9]+\\)")
+              (fw-pf-regexp      "^\\([a-zA-Z-0-9]+\\) +\\([a-zA-Z-]+\\) +\\(src:\\|~>\\|==\\) *\\([.a-zA-Z0-9]+\\)")
               (comments-regexp1 "#.*")
               (comments-regexp2 "//.*")
               )
