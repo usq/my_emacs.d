@@ -120,7 +120,7 @@
   :ensure t
   :init (global-flycheck-mode)
   :config
-  (unbind-key "C-c +" \-mode-map))
+  (unbind-key "C-c +" flycheck-mode-map))
 
 ;; (use-package monokai-theme
 ;;   :config
@@ -207,6 +207,10 @@
 
 (use-package projectile)
 
+(use-package wolfram
+  :config
+  (setq wolfram-alpha-app-id "7L7LE4-HHWQGE9TG6"))
+
 (use-package powerline
   :ensure t
   :config
@@ -226,6 +230,7 @@
     (require 'helm-config)
     (setq helm-locate-fuzzy-match t
 	  helm-apropos-fuzzy-match t)))
+
 
 ;;clojure
 (use-package cider)
@@ -247,6 +252,9 @@
 (require 'my-misc)
 (require 'mite)
 
+(require 'server)
+(unless (server-running-p)
+  (server-start))
 ;;; init.el ends here
 
 

@@ -36,9 +36,10 @@
 ;; i should add .# files to my global gitignore!
 (setq create-lockfiles nil)
 
-(defvar python-shell-interpreter)
-(when (boundp python-shell-interpreter)
-  (setq python-shell-interpreter "python" ))
+;;(defvar python-shell-interpreter)
+;;(when (boundp python-shell-interpreter)
+;;  (setq python-shell-interpreter "python" )
+;;  )
 
 
 ;(setq python-shell-interpreter "path\to\your\python3.2")

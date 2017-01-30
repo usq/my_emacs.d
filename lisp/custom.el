@@ -27,10 +27,11 @@
  '(org-support-shift-select nil)
  '(package-selected-packages
    (quote
-    (color-theme-sanityinc-tomorrow powerline company-jedi projectile google-this sgml cider flycheck Flycheck dirtree gitignore-mode scala-mode markdown-mode exec-path-from-shell cmake-mode sublimity-scroll sublimity slime multiple-cursors mc-mode multiple-cursor-mode swift-mode yasnippet company-sourcekit company browse-kill-ring helm js2-mode undo-tree tex auctex-latexmk auctex djinni-mode reveal-in-osx-finder direx dired-x use-package simple-httpd restclient paradox beacon smartparens monokai-theme smex paredit magit ido-vertical-mode ido-ubiquitous ido-at-point flx-ido ace-jump-mode)))
+    (spotify-el spotify helm-spotify wolfram color-theme-sanityinc-tomorrow powerline company-jedi projectile google-this sgml cider flycheck Flycheck dirtree gitignore-mode scala-mode markdown-mode exec-path-from-shell cmake-mode sublimity-scroll sublimity slime multiple-cursors mc-mode multiple-cursor-mode swift-mode yasnippet company-sourcekit company browse-kill-ring helm js2-mode undo-tree tex auctex-latexmk auctex djinni-mode reveal-in-osx-finder direx dired-x use-package simple-httpd restclient paradox beacon smartparens monokai-theme smex paredit magit ido-vertical-mode ido-ubiquitous ido-at-point flx-ido ace-jump-mode)))
  '(pos-tip-background-color "#A6E22E")
  '(pos-tip-foreground-color "#272822")
  '(powerline-default-separator (quote arrow-fade))
+ '(scroll-bar-mode nil)
  '(weechat-color-list
    (unspecified "#272822" "#20240E" "#F70057" "#F92672" "#86C30D" "#A6E22E" "#BEB244" "#E6DB74" "#40CAE4" "#66D9EF" "#FB35EA" "#FD5FF0" "#74DBCD" "#A1EFE4" "#F8F8F2" "#F8F8F0")))
 (custom-set-faces

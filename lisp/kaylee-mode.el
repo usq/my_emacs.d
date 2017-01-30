@@ -1,20 +1,21 @@
 (setq kaylee-font-lock-keywords
       (let (
-            (keywords '("kaylee"))
-            (types '(":asset" ":kayleehook" ":framework"))
+            (keywords '("~>" "=="))
             )
 
         (let (
               (keywords-regexp  (regexp-opt keywords 'words))
-              (type-regexp      "src:")
-              (event-regexp    "(?:)[a-zA-Z0-9_-]+")
-              (comments-regexp "#.*\\|//.*")
+              (fw-pf-regexp      "^\\([a-zA-Z-]+\\) +\\([a-zA-Z-]+\\) +\\(src:\\|~>\\|==\\) *\\([.a-zA-Z0-9]+\\)")
+              (comments-regexp1 "#.*")
+              (comments-regexp2 "//.*")
               )
           `(
-            (,type-regexp . font-lock-type-face)
-            (,event-regexp . font-lock-function-name-face)
-            (,comments-regexp . font-lock-comment-face)
-            (,keywords-regexp . font-lock-keyword-face)
+            (,fw-pf-regexp . (1 font-lock-type-face))
+            (,fw-pf-regexp . (2 font-lock-function-name-face))
+            (,comments-regexp1 . font-lock-comment-face)
+            (,comments-regexp2 . font-lock-comment-face)
+            (,fw-pf-regexp . (3 font-lock-keyword-face))
+            (,fw-pf-regexp . (4 font-lock-string-face))
             ))))
 
 (define-derived-mode kaylee-mode fundamental-mode

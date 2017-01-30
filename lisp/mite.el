@@ -1,9 +1,6 @@
-
 ;;; Code:
 (require 'cl-lib)
-
-(defun hello(x &key a b)
-    (list x a b))
+(require 'json)
 
 (defun join-path (components)
   "Joins COMPONENTS with /."
@@ -63,7 +60,7 @@
       res)))
 
 
-(defun all-repo-history (root-path from to)
+(defun mc-mite-all-repo-history (root-path from to)
   (interactive "DrootPath:  
 sfromDate: 
 stoDate: ")
@@ -77,8 +74,44 @@ stoDate: ")
        ))))
 
 
-;;(all-repo-history "~/dev/QM/" "2016-12-01" "2016-12-24")
+
+
+(mc-mite-all-repo-history "~/dev/QM/" "2017-01-18" "2017-01-19")
+
+(defun request-json (json)
+  (let* ((api-key "74bbf7d1c679a8ec")
+	 (api-key-header (concat  "'X-MiteApiKey: " api-key "'"))
+	 (curl-command (concat  "curl -s -H " api-key-header " https://quartett-mobile.mite.yo.lk/" json))
+	 )
+
+    (shell-command-to-string curl-command)
+    ))
+
+
+
+
+(with-output-to-temp-buffer "*response*"
+  (princ 
+   (mapcar (lambda (x)
+	     (format "-%S-\n" (plist-get (plist-get x :service) :name)))
+	   (let ((json-object-type 'plist))
+	     (json-read-from-string (request-json "services.json")))
+	   )))
+
+(request-json "daily.json")
+
+
+
+
+;;(plist-get 
+;;       (let ((json-object-type 'plist))
+;;	 (json-read-from-string "{\"foo\" : 3}"))
+;;       :foo)
+;;
+;;(alist-get 'a '((a . 4)))
+
 
 
 (provide 'mite)
+
 ;;; mite.el ends here
