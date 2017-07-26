@@ -72,10 +72,6 @@ MStartValue: ")
   (interactive)
   (message "Walter-Gropius-Straße 17, 80807 München"))
 
-(add-to-list 'auto-mode-alist '("Catalyzer" . kaylee-mode))
-(add-to-list 'auto-mode-alist '("Catalyzer.override" . kaylee-mode))
-(add-to-list 'auto-mode-alist '("Catalyzer.source" . kaylee-mode))
-(add-to-list 'auto-mode-alist '("Catalyzer.fixed" . kaylee-mode))
 
 
 (defun print-shell-variable ()
@@ -112,28 +108,6 @@ MStartValue: ")
   (let* ((pwd (pwd)))
     (kill-new (replace-regexp-in-string "Directory " "" pwd))))
 
-
-(defun rotate-windows (arg)
-  "Rotate your windows; use the prefix argument ARG to rotate the other direction."
-  (interactive "P")
-  (if (not (> (count-windows) 1))
-      (message "You can't rotate a single window!")
-    (let* ((rotate-times (prefix-numeric-value arg))
-           (direction (if (or (< rotate-times 0) (equal arg '(4)))
-                          'reverse 'identity)))
-      (dotimes (_ (abs rotate-times))
-        (dotimes (i (- (count-windows) 1))
-          (let* ((w1 (elt (funcall direction (window-list)) i))
-                 (w2 (elt (funcall direction (window-list)) (+ i 1)))
-                 (b1 (window-buffer w1))
-                 (b2 (window-buffer w2))
-                 (s1 (window-start w1))
-                 (s2 (window-start w2))
-                 (p1 (window-point w1))
-                 (p2 (window-point w2)))
-            (set-window-buffer-start-and-point w1 b2 s2 p2)
-            (set-window-buffer-start-and-point w2 b1 s1 p1)))))))
-
 ;;flyspell mode
 (defun flyspell-switch-dictionary()
   "toggles between english and german dictionary for flyspell mode"
@@ -143,6 +117,65 @@ MStartValue: ")
     (ispell-change-dictionary change)
     (message "Dictionary switched from %s to %s" dic change)))
 
+(defvar *mc-dired-file-to-copy* nil)
+(defun mc-dired-copy ()
+  "Copies the path at point in dired buffer"
+  (interactive)
+  (let ((path (dired-filename-at-point)))
+    (message path)
+    (setq *mc-dired-file-to-copy* path))
+  )
+
+(defun mc-dired-paste ()
+  (interactive)
+  (if (not (null *mc-dired-file-to-copy*))
+      (let* ((source-file *mc-dired-file-to-copy*)
+	     (file-name (file-name-nondirectory source-file))
+	     (current-directory (dired-current-directory))
+	     (new-file (concat current-directory file-name)))
+
+	(if (directory-p source-file)
+	    (copy-directory source-file new-file)
+	    (copy-file source-file  new-file 1))
+	
+	(revert-buffer))
+    (message "nothing copied!")))
+
+(defun mc-dired-run-in-shell ()
+  (interactive)
+  (let ((file (dired-filename-at-point)))
+    (let ((p (get-process (concat file "-process")))
+	  (p2 (get-process (concat file "-process<1>")) ))
+
+      (when (not (null p))
+	(interrupt-process p)
+	(message "killing proc"))
+
+      (when (not (null p2))
+	(interrupt-process p2)
+	(message "killing proc<1>")))
+    
+    
+    (if (file-executable-p file)
+	(start-process-shell-command (concat file "-process") file file)
+      (start-process-shell-command (concat file "-process") file (concat "sh " file)))
+    (display-buffer file t t)))
+
+
+(defun mc-empty-buffer ()
+  (interactive)
+  (let ((name (generate-new-buffer-name "temp")))
+    (generate-new-buffer name)
+    (switch-to-buffer-other-window name)))
+
+(defun mc-two-empty-buffers ()
+  (interactive)
+  (mc-empty-buffer)
+  (mc-empty-buffer))
+
+(defun mc-insert-pwd ()
+  (interactive)
+  (pwd t))
 
 (provide 'my-misc)
 ;;; my-misc ends here

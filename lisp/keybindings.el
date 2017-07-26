@@ -17,6 +17,16 @@
 				(interactive)
 				(shrink-window 5)))
 
+(global-set-key (kbd "C-c a") 'org-agenda)
+
+(global-set-key (kbd "C-c e") 'eval-print-last-sexp)
+
+
+(global-unset-key (kbd "C-j"))
+(global-unset-key (kbd "C-j"))
+(global-set-key (kbd "C-j") 'ace-jump-char-mode)
+
+(global-unset-key (kbd "C-x C-c"))
 
 (provide 'keybindings)
 ;;; keybindings.el ends here

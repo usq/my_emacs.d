@@ -16,3 +16,8 @@ network-security.data
 /smex-items
 .python-environments/
 /url
+projectile-bookmarks.eld
+/lisp/testing.el
+/timelog
+eshell/
+games/

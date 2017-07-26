@@ -14,20 +14,24 @@
 (require 'packages)
 
 (when (not (package-installed-p 'use-package))
+    (package-refresh-contents)
   (package-install 'use-package))
 (setq use-package-always-ensure t)
 
-(package-refresh-contents)
-
 ;;;;;;;;;;;;;;; end bootstrapping ;;;;;;;;;;;;;;;
-
 (use-package exec-path-from-shell
   :init (exec-path-from-shell-initialize))
 
-(use-package dash)
-(use-package google-this)
-(use-package sgml-mode)
+;; always indet everything
+(use-package aggressive-indent
+  :defer t
+  :config
+  (global-aggressive-indent-mode 1))
+
+(use-package dash  :defer t)
+(use-package sgml-mode  :defer t)
 (use-package hideshow
+  :defer t
   :config
   (add-to-list 'hs-special-modes-alist
 	       '(nxml-mode
@@ -43,6 +47,7 @@
   ("C-c h" . hs-toggle-hiding))
 
 (use-package browse-kill-ring
+  :defer t
   :bind
   ("C-c y" . browse-kill-ring))
 
@@ -55,12 +60,16 @@
   ("C-x C-b" . ibuffer))
 
 (use-package multiple-cursors
+  :defer t
   :bind
   ("H-SPC" . set-rectangular-region-anchor))
 
-(use-package swift-mode)
+(use-package swift-mode :defer t)
 
-(use-package yasnippet)
+(use-package yasnippet :defer t :ensure t
+  :config
+  (setq yas-snippet-dirs
+	'("~/.emacs.d/snippets")))
 
 (use-package company
   :bind
@@ -74,6 +83,7 @@
   (add-hook 'python-mode-hook 'my/python-mode-hook))
 
 (use-package paredit
+  :defer t
   :diminish paredit-mode
   :init
   (add-hook 'clojure-mode-hook 'enable-paredit-mode)
@@ -83,11 +93,13 @@
   (add-hook 'lisp-interaction-mode-hook 'enable-paredit-mode)
   (add-hook 'json-mode-hook 'enable-paredit-mode))
 
-(use-package auctex-latexmk)
+
+(use-package auctex-latexmk :defer t)
 
 (use-package undo-tree
   :bind
-  ("C-x u" . undo-tree-visualize))
+  ("C-x u" . undo-tree-visualize)
+  ("C-?" . undo-tree-redo))
 
 (use-package flx)
 (use-package flx-ido
@@ -106,6 +118,7 @@
    ("M-X" . smex-major-mode-commands)))
 
 (use-package ace-jump-mode
+  :defer t
   :config
   (setq ace-jump-mode-case-fold -1)
   :bind
@@ -114,7 +127,7 @@
 
 (use-package smartparens)
 (use-package direx)
-(use-package dirtree)
+(use-package dirtree :defer t)
 
 (use-package flycheck
   :ensure t
@@ -122,21 +135,18 @@
   :config
   (unbind-key "C-c +" flycheck-mode-map))
 
-;; (use-package monokai-theme
-;;   :config
-;;   (load-theme 'monokai))
-
-(use-package  color-theme-sanityinc-tomorrow
-  :config
-  (color-theme-sanityinc-tomorrow-night))
 
 (use-package restclient)
 (use-package simple-httpd)
 (use-package cmake-mode)
 
-(use-package reveal-in-osx-finder)
+;;(use-package xquery-mode
+;;  :mode (("\\.xqm\\'" . xquery-mode)))
+
+(use-package reveal-in-osx-finder :defer t)
 
 (use-package exec-path-from-shell
+  :ensure t
   :config
   (exec-path-from-shell-initialize))
 
@@ -163,7 +173,9 @@
         org-src-fontify-natively t   ;; Pretty code blocks
         org-src-tab-acts-natively t
         org-confirm-babel-evaluate nil
-        org-todo-keywords '((sequence "TODO(t)" "DOING(g)" "|" "DONE(d)")
+	org-agenda-ndays 7
+	org-agenda-window-setup 'current-window
+        org-todo-keywords '((sequence "TODO(t)" "DOING(g)" "WAITING(w)" "|" "DONE(d)")
                             (sequence "|" "CANCELED(c)")))
   (add-to-list 'auto-mode-alist '("\\.txt\\'" . org-mode))
   
@@ -174,20 +186,10 @@
   ;; we use C-c + for org-mode-map
   (unbind-key "C-c +" org-mode-map)
   (unbind-key "C-c -" org-mode-map)
-  (font-lock-add-keywords            ; A bit silly but my headers are now
-   'org-mode `(("^\\*+ \\(TODO\\) "  ; shorter, and that is nice canceled
-                (1 (progn (compose-region (match-beginning 1) (match-end 1) "⚑")
-                          nil)))
-               ("^\\*+ \\(DOING\\) "
-                (1 (progn (compose-region (match-beginning 1) (match-end 1) "⚐")
-                          nil)))
-               ("^\\*+ \\(CANCELED\\) "
-                (1 (progn (compose-region (match-beginning 1) (match-end 1) "✘")
-                          nil)))
-               ("^\\*+ \\(DONE\\) "
-                (1 (progn (compose-region (match-beginning 1) (match-end 1) "✔")
-                          nil)))))
-
+  (unbind-key "<S-left>" org-mode-map)
+  (unbind-key "<S-right>" org-mode-map)
+  (unbind-key "<S-up>" org-mode-map)
+  (unbind-key "<S-down>" org-mode-map)
   (define-key org-mode-map [remap org-return] (lambda () (interactive)
                                                 (if (org-in-src-block-p)
                                                     (org-return)
@@ -197,17 +199,36 @@
    '((sh . t)
      (python . t)
      (dot . t)
+     (latex . t)
      ))
-
+  
+  (add-hook 'org-mode-hook 'jira-link-mode)
+    
   ;; Make windmove work in org-mode:
   (add-hook 'org-shiftup-final-hook 'windmove-up)
   (add-hook 'org-shiftleft-final-hook 'windmove-left)
   (add-hook 'org-shiftdown-final-hook 'windmove-down)
   (add-hook 'org-shiftright-final-hook 'windmove-right))
 
-(use-package projectile)
+;; fix org table layout
+(defun my-org-clocktable-indent-string (level)
+  (if (= level 1)
+      ""
+    (let ((str "^"))
+      (while (> level 2)
+        (setq level (1- level)
+              str (concat str "--")))
+      (concat str "-> "))))
+(advice-add 'org-clocktable-indent-string :override #'my-org-clocktable-indent-string)
+
+
+(use-package projectile
+  :bind
+  ("C-c p f" . projectile-find-file)
+  ("C-c p p" . projectile-switch-project))
 
 (use-package wolfram
+  :defer t
   :config
   (setq wolfram-alpha-app-id "7L7LE4-HHWQGE9TG6"))
 
@@ -215,6 +236,71 @@
   :ensure t
   :config
   (powerline-default-theme))
+
+
+(use-package rainbow-delimiters)
+(use-package color-theme)
+
+;;; https://belak.github.io/base16-emacs/
+(use-package base16-theme
+  :ensure t
+  :config
+  (load-theme 'base16-materia t))
+
+(defun light-theme ()
+  (interactive)
+  (load-theme 'base16-atelier-lakeside-light t))
+
+(defun light-theme2 ()
+  (interactive)
+  (load-theme 'base16-summerfruit-light t))
+
+(defun light-theme3 ()
+  (interactive)
+  (load-theme 'base16-atelier-cave-light t))
+
+
+(defun dark-theme ()
+  (interactive)
+  (load-theme 'base16-materia t))
+
+(defun dark-theme2 ()
+  (interactive)
+  (load-theme 'base16-monokai t))
+
+(defun dark-theme3 ()
+  (interactive)
+  (load-theme 'base16-nord t))
+
+(defun dark-theme4 ()
+  (interactive)
+  (load-theme 'base16-onedark t))
+
+(defun dark-theme5 ()
+  (interactive)
+  (load-theme 'base16-oceanicnext t))
+
+;; 
+;; 
+
+
+
+;; (use-package spacemacs-theme
+;;   :defer t
+;;   :init
+;;   (load-theme 'spacemacs-dark t))
+
+;; (defun light-theme ()
+;;   "Switch to light theme."
+;;   (interactive)
+;;   (load-theme 'spacemacs-light t))
+;; (defun dark-theme ()
+;;   "Switch to dark theme."
+;;   (interactive)
+;;   (load-theme 'spacemacs-dark t))
+
+
+
 
 ;;look at workgroups
 ;;https://github.com/pashinin/workgroups2
@@ -231,6 +317,13 @@
     (setq helm-locate-fuzzy-match t
 	  helm-apropos-fuzzy-match t)))
 
+(use-package rotate :defer t)
+
+(use-package json-snatcher :defer t)
+
+;; hydra
+(use-package hydra :ensure t :defer )
+(require 'hydras)
 
 ;;clojure
 (use-package cider)
@@ -247,14 +340,77 @@
 (require 'keybindings)
 (require 'djinni-mode)
 (require 'kaylee-mode)
-
+(add-to-list 'auto-mode-alist '("Catalyzer.*\\'" . kaylee-mode))
 
 (require 'my-misc)
 (require 'mite)
+(require 'jira)
 
-(require 'server)
-(unless (server-running-p)
-  (server-start))
+
+;;; fix horrible eshell behaviour
+(add-hook
+ 'eshell-mode-hook
+ (lambda ()
+   (setq pcomplete-cycle-completions nil)
+   (setq pcomplete-ignore-case t)))
+
+(put 'downcase-region 'disabled nil)
+
+;;fix latex _ fuckup
+(setq LaTeX-verbatim-environments-local '("Verbatim" "lstlisting"))
+
+(defvar shrinksize 3)
+(setq shrinksize 0)
+(defun windmove-right2 (&optional arg)
+  (interactive "P")
+  (shrink-window shrinksize t)
+  (windmove-do-window-select 'right arg)
+  (enlarge-window shrinksize t))
+
+(defun windmove-left2 (&optional arg)
+  (interactive "P")
+  (shrink-window shrinksize t)
+  (windmove-do-window-select 'left arg)
+  (enlarge-window shrinksize t))
+
+(defun windmove-up2 (&optional arg)
+  (interactive "P")
+  (shrink-window shrinksize)
+  (windmove-do-window-select 'up arg)
+  (enlarge-window shrinksize))
+
+(defun windmove-down2 (&optional arg)
+  (interactive "P")
+  (shrink-window shrinksize)
+  (windmove-do-window-select 'down arg)
+  (enlarge-window shrinksize))
+
+(defun increase-window-size ()
+  (interactive)
+  (enlarge-window shrinksize)
+  (enlarge-window shrinksize t)
+  )
+
+(global-set-key (kbd "M-+") 'increase-window-size)
+(global-set-key (kbd "M-<right>") 'windmove-right)
+(global-set-key (kbd "M-<left>") 'windmove-left)
+(global-set-key (kbd "M-<up>") 'windmove-up)
+(global-set-key (kbd "M-<down>") 'windmove-down)
+
+(global-set-key (kbd "<S-right>") 'windmove-right2)
+(global-set-key (kbd "<S-left>") 'windmove-left2)
+(global-set-key (kbd "<S-up>") 'windmove-up2)
+(global-set-key (kbd "<S-down>") 'windmove-down2)
+
+;;disable f*in keyboard-escape-quit
+(defun keyboard-escape-quit () (interactive))
+
+(require 'zen-mode)
+
+;;(require 'server)
+
+
+;; should be handled by brew?
+;; (unless (server-running-p)
+;;   (server-start))
 ;;; init.el ends here
-
-
