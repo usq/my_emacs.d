@@ -21,3 +21,5 @@ projectile-bookmarks.eld
 /timelog
 eshell/
 games/
+/lisp/jira.rest
+/lisp/jira-params.el
