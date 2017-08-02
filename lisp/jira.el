@@ -70,7 +70,7 @@
 (defun list-serenity-issues ()
   (jira-clean 
    (json-from-url sry-search-url
-		  '(("Authorization" . jira-qm-token)))))
+		  (list `("Authorization" . ,jira-qm-token)))))
 
 (defun jira-sync-serenity ()
   (interactive)
