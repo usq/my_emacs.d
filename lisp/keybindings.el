@@ -26,6 +26,8 @@
 (global-unset-key (kbd "C-j"))
 (global-set-key (kbd "C-j") 'ace-jump-char-mode)
 
+(global-set-key (kbd "C-c k") 'kaylee-switch)
+
 (global-unset-key (kbd "C-x C-c"))
 
 (provide 'keybindings)

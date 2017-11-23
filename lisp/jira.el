@@ -67,14 +67,40 @@
 	       (cdr (assoc 'name (assoc 'status (assoc 'fields issue))))))
 	    all-issues)))
 
-(defun list-serenity-issues ()
+(defun list-issue-with-jql-url (jql-url)
   (jira-clean 
-   (json-from-url sry-search-url
+   (json-from-url jql-url
 		  (list `("Authorization" . ,jira-qm-token)))))
+
+(defun list-serenity-issues ()
+  (list-issue-with-jql-url sry-search-url))
+
+(defun list-fw-issues ()
+    (list-issue-with-jql-url fw-search-url))
+
+(defun list-pipa-issues ()
+    (list-issue-with-jql-url pipa-search-url))
+
+(defun jira-sync-fw ()
+  (interactive)
+    (jira-sync-issues (list-fw-issues)))
 
 (defun jira-sync-serenity ()
   (interactive)
-  (let* ((issues (list-serenity-issues))
+  (jira-sync-issues (list-serenity-issues)))
+
+(defun jira-sync-pipa ()
+  (interactive)
+  (jira-sync-issues (list-pipa-issues)))
+
+(defun jira-cleanup-umlaute (ins)
+  (s-replace-all '(("Ã¼" . "ü")
+		   ("Ã" . "Ü")
+		   ("Ã¶" . "ö"))
+		 ins))
+
+(defun jira-sync-issues (j-issues)
+  (let* ((issues j-issues)
 	 (content (buffer-substring-no-properties (point-min) (point-max)))
 	 (deduplicated-issues nil))
     (setq deduplicated-issues 
@@ -90,15 +116,88 @@
 	      (when (not (null issue))
 		(newline)
 		(let ((key (first issue))
-		      (description (second issue))
+		      (description (jira-cleanup-umlaute (second issue)))
 		      (status (third issue)))
-		  (if (equalp status "In Progress")
-		      (insert (format  "*** DOING [%s] %s"  (first issue) (second issue)))
-		    (insert (format  "*** TODO [%s] %s"  (first issue) (second issue)))))))
-	    deduplicated-issues))
-  (jira-link-mode)
-  (jira-link-mode))
+		  (case ())
+		  (cond ((equalp status "In Progress") (insert (format  "** DOING [%s] %s"  (first issue) description)))
+			((equalp status "Blocked") (insert (format  "** WAITING [%s] %s"  (first issue) description)))
+			(t (insert (format  "** TODO [%s] %s"  (first issue) description)))
+			)
+)))
+	  deduplicated-issues))
+    (jira-link-mode)
+    (jira-link-mode))
 
-;;https://www.gnu.org/software/emacs/manual/html_mono/widget.html#Programming-Example
+
+(defun jira-kv-mapping (k v)
+  (let ((m 
+	 '(
+	   ("priority" .  (("mapped" . "priority")
+			   ("values" . (("minor" . "4")))))
+	   ("type" . (("mapped" . "issuetype")
+		      ("values" . (("feedback" . "13")
+				   ("story" . "7")
+				   ("task" . "3")
+				   ("bug" . "1")))))
+	   
+	   ("project" . (("mapped" . "pid")
+			 ("values" . (("php" . "10501")
+				      ("serenity" . "13804")
+				      ("fw" . "13301")))))
+	   
+	   ("platform" . (("mapped" . "customfield_10502")
+			  ("values" . (("ios" . "10114")
+				       ("all" . "10113")))))
+	   ("component" . (("mapped" . "components")
+			   ("values" . (("kaylee" . "14038")))))
+	   
+	   )))
+    (let ((nk (assoc-recursive m k "mapped"))
+	  (nv (assoc-recursive m k "values" v)))
+      (if (and (not (null nk))
+	       (not (null nv)))
+	  (concat nk "=" nv)
+	nil))))
+
+
+(defun assoc-recursive (alist &rest keys)
+  "Recursively find KEYs in ALIST."
+  (while keys
+    (setq alist (cdr (assoc (pop keys) alist))))
+  alist)
+
+
+(defmacro jira-issue-url (&rest elements)
+  `(let* ((els ',elements)
+	  (pairs (mapcar (lambda (x) (s-split "=" (symbol-name x))) els)))
+     
+     (concat "https://jira.quartett-mobile.de/secure/CreateIssueDetails!init.jspa?"
+	     (s-join "&" 
+		     (mapcar (lambda (p)
+			       (let ((r (jira-kv-mapping (first p) (second p))))
+				 (if (not (null r))
+				     r
+				   (concat (first p) "=" (second p)))))
+				     pairs)))))
+
+(defun create-fw-task ()
+  (interactive)
+  (browse-url (jira-issue-url reporter=conrads project=fw priority=minor type=task platform=ios)))
+
+(defun create-php-story ()
+  (interactive)
+  (browse-url (jira-issue-url reporter=conrads project=php priority=minor type=story platform=ios)))
+
+(defun create-php-task ()
+  (interactive)
+  (browse-url (jira-issue-url reporter=conrads project=php priority=minor type=task platform=ios)))
+
+(defun create-kaylee-feedback-ticket ()
+  (interactive)
+  (browse-url (jira-issue-url reporter=conrads project=serenity priority=minor type=feedback platform=all component=kaylee)))
+
+(defun create-kaylee-bug-ticket ()
+  (interactive)
+  (browse-url (jira-issue-url reporter=conrads project=serenity priority=minor type=bug platform=all component=kaylee)))
 
 (provide 'jira)

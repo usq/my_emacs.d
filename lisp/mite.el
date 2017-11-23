@@ -76,7 +76,7 @@ stoDate: ")
 
 
 
-(mc-mite-all-repo-history "~/dev/QM/" "2017-01-18" "2017-01-19")
+;;(mc-mite-all-repo-history "~/dev/QM/" "2017-02-27" "2017-02-28")
 
 (defun request-json (json)
   (let* ((api-key "74bbf7d1c679a8ec")
@@ -90,15 +90,15 @@ stoDate: ")
 
 
 
-(with-output-to-temp-buffer "*response*"
-  (princ 
-   (mapcar (lambda (x)
-	     (format "-%S-\n" (plist-get (plist-get x :service) :name)))
-	   (let ((json-object-type 'plist))
-	     (json-read-from-string (request-json "services.json")))
-	   )))
+;; (with-output-to-temp-buffer "*response*"
+;;   (princ 
+;;    (mapcar (lambda (x)
+;; 	     (format "-%S-\n" (plist-get (plist-get x :service) :name)))
+;; 	   (let ((json-object-type 'plist))
+;; 	     (json-read-from-string (request-json "services.json")))
+;; 	   )))
 
-(request-json "daily.json")
+;; (request-json "daily.json")
 
 
 

@@ -1,11 +1,8 @@
 (setq kaylee-font-lock-keywords
-      (let (
-            (keywords '("~>" "=="))
-            )
-
+      (let ((keywords '("~>" "==" ">=")))
         (let (
               (keywords-regexp  (regexp-opt keywords 'words))
-              (fw-pf-regexp      "^\\([a-zA-Z-0-9]+\\) +\\([a-zA-Z-]+\\) +\\(src:\\|~>\\|==\\) *\\([.a-zA-Z0-9]+\\)")
+              (fw-pf-regexp      "^\\([.a-zA-Z-0-9\\/]+\\) +\\([a-zA-Z-]+\\) +\\(src:\\|~>\\|==\\|>=\\) *\\([.a-zA-Z0-9/]+\\)")
               (comments-regexp1 "#.*")
               (comments-regexp2 "//.*")
               )
@@ -64,9 +61,6 @@ Mframework: ")
   (interactive)
   (_execKayleeShell "kaylee init framework"))
 
-(defun kaylee-start-local-www ()
-  (interactive) 
-  )
 
 (defun _execKayleeShell (arg)
   (if (get-buffer "*kaylee-output*")
@@ -78,8 +72,81 @@ Mframework: ")
 
     (pop-to-buffer "*kaylee-output*")))
 
+
+(defun kaylee-token ()
+  (interactive)
+  (defun all-but-last (l)
+    (reverse (cdr (reverse l))))
+  
+  (let* ((token (shell-command-to-string "security find-generic-password -g -a kaylee -s de.quartett-mobile.kaylee"))
+	 (pwline (first (split-string token "\n")))
+	 (replaced (replace-regexp-in-string "password: \\\"" "" pwline))
+	 (cleaned-up (join-string-list (reverse (cdr (reverse (split-string replaced "" t )))) ""))
+	 (cleaned-up2 (join-string-list  (all-but-last (split-string replaced "" t )) ""))	 
+	 )
+
+    (message "Copied token to clipboard")
+    (paste-to-osx cleaned-up2)))
+
+
+
+(require 'cl-lib)
+(defun kaylee--read-lines (filePath)
+  "Return a list of lines of a file at filePath."
+  (with-temp-buffer
+    (insert-file-contents filePath)
+    (split-string (buffer-string) "\n" t)))
+
+
+
+(defun kaylee--src-fws-in-catalyzerfixed (path)
+  (let*
+      (
+       (catlines (kaylee--read-lines path))
+       (filtered (cl-remove-if-not (lambda (x)  (and (not (s-starts-with-p "#" x))
+						     (s-contains-p "src:" x)))
+				   catlines))
+       (fws (mapcar (lambda (fw)
+		      (let* ((parts (s-split " " fw))
+			     (branchparts (s-split ":" (third parts)) )
+			     (branchname (second branchparts))
+			     (fwname (concat (first parts) " " (second parts) " src:" branchname))
+			     )
+			fwname))
+		    filtered))
+       )
+    fws))
+
+(defun kaylee-switch ()
+  (interactive)
+  (let* ((fws (kaylee--src-fws-in-catalyzerfixed "Catalyzer.fixed"))
+	 (selection (ido-completing-read "Select " fws))
+	 (selparts (s-split " " selection))
+	 (fwname (first selparts))
+	 (fwplatform (second selparts)))
+	 (find-file-other-window (concat "Serenity/Projects/" fwplatform "/" fwname "/Catalyzer"))))
+
+
+(require 'mc)
+(defun kaylee-run-tests ()
+  (interactive)
+  (let ((buffname "kaylee tests"))
+    (let ((buf (get-buffer-create buffname)))
+      (with-current-buffer
+	  buf
+	(special-mode)	
+	(setq buffer-read-only nil)
+	(erase-buffer)
+	(special-mode)
+	(mc-async-cmd-logging "~/dev/QM/frameworks/serenity/kaylee/bin/kaylee selftest"
+			      buf)
+	(switch-to-buffer-other-window buf)
+	)))
+  )
+
+
+
 (provide 'kaylee-mode)
 
-
-
+;; curl http://subfusion.net/cgi-bin/quote.pl\?quote\=firefly\&number\=1 | tail -n +15 | tail -r | tail -n +4 | tail -r
 ;; http://subfusion.net/cgi-bin/quote.pl?quote=firefly&number=1

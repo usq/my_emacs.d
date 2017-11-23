@@ -28,17 +28,17 @@
  '(magit-log-arguments (quote ("--graph" "--color" "--decorate" "-n256")))
  '(org-agenda-files
    (quote
-    ("~/Dropbox/documents/orga.org" "~/dev/TU/master-thesis/notes.org")))
+    ("~/Documents/org/orga.org" "~/Documents/org/fw.org" "~/Documents/org/pipa.org")))
  '(org-babel-load-languages (quote ((sh . t) (emacs-lisp . t))))
  '(org-capture-templates
    (quote
     (("i" "file to inbox" entry
-      (file+headline "~/Dropbox/documents/orga.org" "Inbox")
+      (file+headline "~/Documents/org/orga.org" "Inbox")
       ""))))
  '(org-support-shift-select nil)
  '(package-selected-packages
    (quote
-    (zen-mode rainbow-delimiters rainbow-delimiter base16-theme landmark emacs-home json-snatcher hilight-symbol highlight-symbol hilight-symbol-mode light-symbol light-symbol-mode hydra tea-time aggressive-indent agressive-indent agressive-indent-mode rotate emacs-rotate color-theme spacemacs-theme xquery-mode spotify-el spotify helm-spotify wolfram color-theme-sanityinc-tomorrow powerline company-jedi projectile google-this sgml cider flycheck Flycheck dirtree gitignore-mode scala-mode markdown-mode exec-path-from-shell cmake-mode sublimity-scroll sublimity slime multiple-cursors mc-mode multiple-cursor-mode swift-mode yasnippet company-sourcekit company browse-kill-ring helm js2-mode undo-tree tex auctex-latexmk auctex djinni-mode reveal-in-osx-finder direx dired-x use-package simple-httpd restclient paradox beacon smartparens monokai-theme smex paredit magit ido-vertical-mode ido-ubiquitous ido-at-point flx-ido ace-jump-mode)))
+    (tidy s slack json-reformat neotree ace-window logview org zen-mode rainbow-delimiters rainbow-delimiter base16-theme landmark emacs-home json-snatcher hilight-symbol highlight-symbol hilight-symbol-mode light-symbol light-symbol-mode hydra tea-time aggressive-indent agressive-indent agressive-indent-mode rotate emacs-rotate color-theme spacemacs-theme xquery-mode spotify-el spotify helm-spotify wolfram color-theme-sanityinc-tomorrow powerline company-jedi projectile google-this sgml cider flycheck Flycheck dirtree gitignore-mode scala-mode markdown-mode exec-path-from-shell cmake-mode sublimity-scroll sublimity slime multiple-cursors mc-mode multiple-cursor-mode swift-mode yasnippet company-sourcekit company browse-kill-ring helm js2-mode undo-tree tex auctex-latexmk auctex djinni-mode reveal-in-osx-finder direx dired-x use-package simple-httpd restclient paradox beacon smartparens monokai-theme smex paredit magit ido-vertical-mode ido-ubiquitous ido-at-point flx-ido ace-jump-mode)))
  '(pcomplete-ignore-case t)
  '(pos-tip-background-color "#A6E22E")
  '(pos-tip-foreground-color "#272822")
@@ -53,6 +53,7 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
+ '(aw-leading-char-face ((t (:inherit ace-jump-face-foreground :height 3.0))))
  '(font-lock-comment-face ((t (:inherit nil :foreground "#b0b0b0" :slant italic))))
  '(highlight-symbol-face ((t (:inherit highlight :background "gray33"))))
  '(mode-line ((t (:foreground "#000000" :background "#dddddd" :box nil))))

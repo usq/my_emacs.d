@@ -1,12 +1,11 @@
 
-
+(require 'js2-mode)
 (defun add-format-json-to-js2-mode () (define-key js2-mode-map (kbd "C-x TAB") 'json-format))
 (add-hook 'js2-mode-hook 'add-format-json-to-js2-mode)
 
 (defun show-in-finder ()
   (interactive)
   (reveal-in-osx-finder))
-
 
 (defun acc-map (key n m)
   (nth (- n 1) (caddr (assoc key m))))
@@ -71,7 +70,6 @@ MStartValue: ")
 (defun qm-address ()
   (interactive)
   (message "Walter-Gropius-Straße 17, 80807 München"))
-
 
 
 (defun print-shell-variable ()
@@ -161,7 +159,6 @@ MStartValue: ")
       (start-process-shell-command (concat file "-process") file (concat "sh " file)))
     (display-buffer file t t)))
 
-
 (defun mc-empty-buffer ()
   (interactive)
   (let ((name (generate-new-buffer-name "temp")))
@@ -176,6 +173,24 @@ MStartValue: ")
 (defun mc-insert-pwd ()
   (interactive)
   (pwd t))
+
+(defun mc-orga ()
+  (interactive)
+  (find-file-other-window "~/Documents/org/orga.org"))
+
+
+(defun snake_case-to-camelCase ()
+  "Convert aa_bb to aaBb in region."
+  (interactive)
+  (when (use-region-p)
+    (message "foo")
+    (let ((regex "\\([a-z]\\)_\\([a-z]\\)"))
+      (goto-char (region-beginning))
+      (while (re-search-forward regex nil t)
+	(replace-match (concat (match-string 1) (upcase (match-string 2)))
+		       t)))))
+
+
 
 (provide 'my-misc)
 ;;; my-misc ends here

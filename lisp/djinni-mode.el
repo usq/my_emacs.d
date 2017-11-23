@@ -10,8 +10,7 @@
               (keywords-regexp  (regexp-opt keywords  'words))
               (type-regexp      "\\<bool\\>\\|\\<string\\>\\|\\<generated_[a-zA-Z_]*\\>\\|+o\\|+j\\|+c")
               (event-regexp    "[a-zA-Z_]+:")
-              (comments-regexp "#.*")
-              )
+              (comments-regexp "#.*"))
 
           `(
             (,type-regexp . font-lock-type-face)
@@ -22,11 +21,12 @@
             ))))
 
 
-
 (define-derived-mode djinni-mode fundamental-mode
   "djinni mode"
   ;; code for syntax highlighting
   (setq font-lock-defaults '((djinni-font-lock-keywords))))
+
+
 
 (defun join-string-list (l sep)
   (mapconcat 'identity l sep))

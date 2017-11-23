@@ -79,8 +79,7 @@
 
 (use-package company-jedi
   :config
-  (add-to-list 'company-backends 'company-jedi)
-  (add-hook 'python-mode-hook 'my/python-mode-hook))
+  (add-to-list 'company-backends 'company-jedi))
 
 (use-package paredit
   :defer t
@@ -222,6 +221,22 @@
 (advice-add 'org-clocktable-indent-string :override #'my-org-clocktable-indent-string)
 
 
+
+;;;; look at https://www.suenkler.info/notes/emacs-config/
+(use-package neotree
+  :ensure t
+  :config (setq neo-window-width 40))
+(define-key global-map (kbd "<f1>") 'neotree)
+
+(use-package ace-window
+  :ensure t
+  :init
+   (progn
+    (global-set-key [remap other-window] 'ace-window)
+    (custom-set-faces
+     '(aw-leading-char-face
+       ((t (:inherit ace-jump-face-foreground :height 3.0)))))))
+
 (use-package projectile
   :bind
   ("C-c p f" . projectile-find-file)
@@ -280,9 +295,6 @@
   (interactive)
   (load-theme 'base16-oceanicnext t))
 
-;; 
-;; 
-
 ;;;; follow-mode!!!!!!!!!!!!!!!!!
 
 ;; (use-package spacemacs-theme
@@ -322,8 +334,10 @@
 (use-package json-snatcher :defer t)
 
 ;; hydra
-(use-package hydra :ensure t :defer )
+(use-package hydra :ensure t :defer t)
 (require 'hydras)
+
+(use-package tidy :defer t)
 
 ;;clojure
 (use-package cider)
@@ -346,7 +360,6 @@
 (require 'mite)
 (require 'jira)
 
-
 ;;; fix horrible eshell behaviour
 (add-hook
  'eshell-mode-hook
@@ -359,53 +372,21 @@
 ;;fix latex _ fuckup
 (setq LaTeX-verbatim-environments-local '("Verbatim" "lstlisting"))
 
-(defvar shrinksize 3)
-(setq shrinksize 0)
-(defun windmove-right2 (&optional arg)
-  (interactive "P")
-  (shrink-window shrinksize t)
-  (windmove-do-window-select 'right arg)
-  (enlarge-window shrinksize t))
-
-(defun windmove-left2 (&optional arg)
-  (interactive "P")
-  (shrink-window shrinksize t)
-  (windmove-do-window-select 'left arg)
-  (enlarge-window shrinksize t))
-
-(defun windmove-up2 (&optional arg)
-  (interactive "P")
-  (shrink-window shrinksize)
-  (windmove-do-window-select 'up arg)
-  (enlarge-window shrinksize))
-
-(defun windmove-down2 (&optional arg)
-  (interactive "P")
-  (shrink-window shrinksize)
-  (windmove-do-window-select 'down arg)
-  (enlarge-window shrinksize))
-
-(defun increase-window-size ()
-  (interactive)
-  (enlarge-window shrinksize)
-  (enlarge-window shrinksize t)
-  )
-
-(global-set-key (kbd "M-+") 'increase-window-size)
-(global-set-key (kbd "M-<right>") 'windmove-right)
-(global-set-key (kbd "M-<left>") 'windmove-left)
-(global-set-key (kbd "M-<up>") 'windmove-up)
-(global-set-key (kbd "M-<down>") 'windmove-down)
-
-(global-set-key (kbd "<S-right>") 'windmove-right2)
-(global-set-key (kbd "<S-left>") 'windmove-left2)
-(global-set-key (kbd "<S-up>") 'windmove-up2)
-(global-set-key (kbd "<S-down>") 'windmove-down2)
-
 ;;disable f*in keyboard-escape-quit
 (defun keyboard-escape-quit () (interactive))
 
+(require 'mc-snippets)
+
+;;; https://github.com/gongo/json-reformat
+(use-package json-reformat)
+(use-package s)
 (require 'zen-mode)
+(require 'org-config)
+(require 'qmlog)
+
+
+
+(find-file "~/Documents/org/orga.org")
 
 ;;(require 'server)
 
