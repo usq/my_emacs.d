@@ -20,6 +20,7 @@
 (global-set-key (kbd "C-c a") 'org-agenda)
 
 (global-set-key (kbd "C-c e") 'eval-print-last-sexp)
+(global-set-key (kbd "C-c C-b") 'browse-url)
 
 
 (global-unset-key (kbd "C-j"))

@@ -28,7 +28,7 @@
  '(magit-log-arguments (quote ("--graph" "--color" "--decorate" "-n256")))
  '(org-agenda-files
    (quote
-    ("~/Documents/org/orga.org" "~/Documents/org/fw.org" "~/Documents/org/pipa.org")))
+    ("~/Documents/org/orga.org" "~/Dropbox/org/qm.org" "~/Documents/org/pipa.org")))
  '(org-babel-load-languages (quote ((sh . t) (emacs-lisp . t))))
  '(org-capture-templates
    (quote
@@ -38,7 +38,7 @@
  '(org-support-shift-select nil)
  '(package-selected-packages
    (quote
-    (tidy s slack json-reformat neotree ace-window logview org zen-mode rainbow-delimiters rainbow-delimiter base16-theme landmark emacs-home json-snatcher hilight-symbol highlight-symbol hilight-symbol-mode light-symbol light-symbol-mode hydra tea-time aggressive-indent agressive-indent agressive-indent-mode rotate emacs-rotate color-theme spacemacs-theme xquery-mode spotify-el spotify helm-spotify wolfram color-theme-sanityinc-tomorrow powerline company-jedi projectile google-this sgml cider flycheck Flycheck dirtree gitignore-mode scala-mode markdown-mode exec-path-from-shell cmake-mode sublimity-scroll sublimity slime multiple-cursors mc-mode multiple-cursor-mode swift-mode yasnippet company-sourcekit company browse-kill-ring helm js2-mode undo-tree tex auctex-latexmk auctex djinni-mode reveal-in-osx-finder direx dired-x use-package simple-httpd restclient paradox beacon smartparens monokai-theme smex paredit magit ido-vertical-mode ido-ubiquitous ido-at-point flx-ido ace-jump-mode)))
+    (markdown-preview-mode tidy s slack json-reformat neotree ace-window logview org zen-mode rainbow-delimiters rainbow-delimiter base16-theme landmark emacs-home json-snatcher hilight-symbol highlight-symbol hilight-symbol-mode light-symbol light-symbol-mode hydra tea-time aggressive-indent agressive-indent agressive-indent-mode rotate emacs-rotate color-theme spacemacs-theme xquery-mode spotify-el spotify helm-spotify wolfram color-theme-sanityinc-tomorrow powerline company-jedi projectile google-this sgml cider flycheck Flycheck dirtree gitignore-mode scala-mode markdown-mode exec-path-from-shell cmake-mode sublimity-scroll sublimity slime multiple-cursors mc-mode multiple-cursor-mode swift-mode yasnippet company-sourcekit company browse-kill-ring helm js2-mode undo-tree tex auctex-latexmk auctex djinni-mode reveal-in-osx-finder direx dired-x use-package simple-httpd restclient paradox beacon smartparens monokai-theme smex paredit magit ido-vertical-mode ido-ubiquitous ido-at-point flx-ido ace-jump-mode)))
  '(pcomplete-ignore-case t)
  '(pos-tip-background-color "#A6E22E")
  '(pos-tip-foreground-color "#272822")

@@ -161,6 +161,8 @@
          ("\\.markdown\\'" . markdown-mode))
   :init (setq markdown-command "multimarkdown"))
 
+(use-package markdown-preview-mode :ensure t)
+
 (use-package org
   :ensure t        ; But it comes with Emacs now!?
   :init
@@ -174,10 +176,9 @@
         org-confirm-babel-evaluate nil
 	org-agenda-ndays 7
 	org-agenda-window-setup 'current-window
-        org-todo-keywords '((sequence "TODO(t)" "DOING(g)" "WAITING(w)" "|" "DONE(d)")
+        org-todo-keywords '((sequence "TODO(t)" "|" "DOING(g)" "WAITING(w)" "|" "DONE(d)")
                             (sequence "|" "CANCELED(c)")))
   (add-to-list 'auto-mode-alist '("\\.txt\\'" . org-mode))
-  
   :bind
   (("C-c l" . org-store-link)
    ("C-c c" . org-capture))
@@ -385,8 +386,7 @@
 (require 'qmlog)
 
 
-
-(find-file "~/Documents/org/orga.org")
+(find-file "~/Dropbox/org/qm.org")
 
 ;;(require 'server)
 
