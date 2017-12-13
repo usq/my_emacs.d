@@ -161,7 +161,7 @@
          ("\\.markdown\\'" . markdown-mode))
   :init (setq markdown-command "multimarkdown"))
 
-(use-package markdown-preview-mode :ensure t)
+;;(use-package markdown-preview-mode :ensure t)
 
 (use-package org
   :ensure t        ; But it comes with Emacs now!?
@@ -388,10 +388,8 @@
 
 (find-file "~/Dropbox/org/qm.org")
 
-;;(require 'server)
+(require 'server)
+(unless (server-running-p)
+  (server-start))
 
-
-;; should be handled by brew?
-;; (unless (server-running-p)
-;;   (server-start))
 ;;; init.el ends here

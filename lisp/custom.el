@@ -44,7 +44,6 @@
  '(pos-tip-foreground-color "#272822")
  '(powerline-default-separator (quote arrow-fade))
  '(scroll-bar-mode nil)
- '(server-mode t)
  '(show-paren-mode t)
  '(weechat-color-list
    (unspecified "#272822" "#20240E" "#F70057" "#F92672" "#86C30D" "#A6E22E" "#BEB244" "#E6DB74" "#40CAE4" "#66D9EF" "#FB35EA" "#FD5FF0" "#74DBCD" "#A1EFE4" "#F8F8F2" "#F8F8F0")))
