@@ -96,7 +96,8 @@
 (defun jira-cleanup-umlaute (ins)
   (s-replace-all '(("Ã¼" . "ü")
 		   ("Ã" . "Ü")
-		   ("Ã¶" . "ö"))
+		   ("Ã¶" . "ö")
+		   ("Ã¤" . "ä"))
 		 ins))
 
 (defun jira-sync-issues (j-issues)
