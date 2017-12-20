@@ -31,6 +31,9 @@
 
 (global-unset-key (kbd "C-x C-c"))
 
+(when (boundp 'dired-mode-map)
+  (define-key  dired-mode-map (kbd "C-c C-c") 'mc-open-file-at-point))
+
 (provide 'keybindings)
 ;;; keybindings.el ends here
 

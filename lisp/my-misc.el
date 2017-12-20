@@ -190,6 +190,9 @@ MStartValue: ")
 	(replace-match (concat (match-string 1) (upcase (match-string 2)))
 		       t)))))
 
+(defun mc-open-file-at-point ()
+  (interactive)
+  (start-process "external" nil "open" (dired-get-filename)))
 
 
 (provide 'my-misc)
