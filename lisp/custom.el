@@ -26,15 +26,14 @@
  '(ispell-highlight-face (quote flyspell-incorrect))
  '(magit-diff-use-overlays nil)
  '(magit-log-arguments (quote ("--graph" "--color" "--decorate" "-n256")))
- '(org-agenda-files
-   (quote
-    ("~/Documents/org/orga.org" "~/Dropbox/org/qm.org" "~/Documents/org/pipa.org")))
+ '(org-agenda-files (quote ("~/Dropbox/org/qm.org")))
  '(org-babel-load-languages (quote ((sh . t) (emacs-lisp . t))))
  '(org-capture-templates
    (quote
     (("i" "file to inbox" entry
-      (file+headline "~/Documents/org/orga.org" "Inbox")
+      (file+headline "~/Dropbox/org/file-this.org" "Inbox")
       ""))))
+ '(org-default-notes-file "~/Dropbox/org/file-this.org")
  '(org-support-shift-select nil)
  '(package-selected-packages
    (quote
