@@ -110,7 +110,7 @@
 
 (use-package ido-vertical-mode)
 (use-package ido-at-point)
-(use-package ido-ubiquitous)
+(use-package ido-completing-read+)
 (use-package smex
   :bind
   (("M-x" . smex)
