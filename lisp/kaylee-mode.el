@@ -30,9 +30,6 @@
   (interactive)
   (_execKayleeShell "kaylee mount"))
 
-(defun kaylee-fix ()
-  (interactive)
-  (_execKayleeShell "kaylee fix"))
 
 (defun kaylee-info (platform fw)
   (interactive
@@ -61,16 +58,22 @@ Mframework: ")
   (interactive)
   (_execKayleeShell "kaylee init framework"))
 
+(defun kaylee-fix ()
+  (interactive)
+  (_execKayleeShell "kaylee" "fix"))
 
-(defun _execKayleeShell (arg)
+
+
+(defun _execKayleeShell (&rest args)
   (if (get-buffer "*kaylee-output*")
       (kill-buffer "*kaylee-output*"))
-  (with-output-to-temp-buffer "*kaylee-output*"
-    (shell-command (concat arg " && echo done")
-                   "*kaylee-output*"
-                   "*kaylee-output*")
 
-    (pop-to-buffer "*kaylee-output*")))
+  (let ((output (get-buffer-create "*kaylee-output*")))
+    (eval `(start-process "kaylee process" output ,@args))
+    (switch-to-buffer-other-window output)
+    (special-mode)
+    )
+   )
 
 
 (defun kaylee-token ()
