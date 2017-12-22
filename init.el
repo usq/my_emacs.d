@@ -94,7 +94,7 @@
 
 
 (use-package auctex-latexmk :defer t)
-
+(use-package typescript-mode :defer t)
 (use-package undo-tree
   :bind
   ("C-x u" . undo-tree-visualize)
