@@ -95,6 +95,7 @@
 
 (use-package auctex-latexmk :defer t)
 (use-package typescript-mode :defer t)
+(use-package angular-mode :defer t)
 (use-package undo-tree
   :bind
   ("C-x u" . undo-tree-visualize)
@@ -161,7 +162,12 @@
          ("\\.markdown\\'" . markdown-mode))
   :init (setq markdown-command "multimarkdown"))
 
-;;(use-package markdown-preview-mode :ensure t)
+
+(use-package dimmer
+  :init
+  (setq dimmer-percent 0.3)
+  :config
+  (dimmer-activate))
 
 (use-package org
   :ensure t        ; But it comes with Emacs now!?
