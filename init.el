@@ -392,6 +392,13 @@
 (require 'qmlog)
 
 
+;;;;; REPOSITORIES
+(add-to-list 'load-path (concat user-emacs-directory "repos/org-kanban"))
+(load-file (concat user-emacs-directory "repos/org-kanban/org-kanban.el"))
+
+
+
+
 (find-file "~/Dropbox/org/qm.org")
 
 (require 'server)

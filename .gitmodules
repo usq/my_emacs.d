@@ -1,0 +1,3 @@
+[submodule "repos/org-kanban"]
+	path = repos/org-kanban
+	url = https://github.com/hagmonk/org-kanban.git
