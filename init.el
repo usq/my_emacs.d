@@ -347,7 +347,9 @@
 (use-package tidy :defer t)
 
 ;;clojure
-(use-package cider)
+(use-package cider
+  :ensure t
+  :pin MELPA-Stable)
 
 (require 'mac)
 (require 'tex)
