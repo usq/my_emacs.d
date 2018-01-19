@@ -167,7 +167,7 @@
   :init
   (setq dimmer-percent 0.3)
   :config
-  (dimmer-activate))
+  (dimmer-mode))
 
 (use-package org
   :ensure t        ; But it comes with Emacs now!?
