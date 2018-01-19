@@ -235,6 +235,10 @@
   :config (setq neo-window-width 40))
 (define-key global-map (kbd "<f1>") 'neotree)
 
+(use-package which-key
+  :config
+  (which-key-mode))
+
 (use-package ace-window
   :ensure t
   :init
