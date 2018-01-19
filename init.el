@@ -363,6 +363,7 @@
 (use-package flycheck-kotlin)
 (use-package kotlin-mode)
 
+
 (require 'mac)
 (require 'tex)
 
@@ -407,10 +408,11 @@
 
 
 ;;;;; REPOSITORIES
+(add-to-list 'load-path (concat user-emacs-directory "repos"))
 (add-to-list 'load-path (concat user-emacs-directory "repos/org-kanban"))
 (load-file (concat user-emacs-directory "repos/org-kanban/org-kanban.el"))
 
-
+(require 'kotlin-imenu)
 
 
 (find-file "~/Dropbox/org/qm.org")
