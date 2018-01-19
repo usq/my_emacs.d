@@ -353,7 +353,15 @@
 ;;clojure
 (use-package cider
   :ensure t
-  :pin MELPA-Stable)
+  :pin MELPA-Stable
+  :config
+  (add-hook 'cider-repl-mode-hook #'eldoc-mode)
+  (setq cider-repl-use-pretty-printing t))
+
+
+;; kotlin
+(use-package flycheck-kotlin)
+(use-package kotlin-mode)
 
 (require 'mac)
 (require 'tex)
