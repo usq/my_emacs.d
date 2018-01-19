@@ -1,3 +1,6 @@
 [submodule "repos/org-kanban"]
 	path = repos/org-kanban
 	url = https://github.com/hagmonk/org-kanban.git
+[submodule "repos/kotlin-imenu"]
+	path = repos/kotlin-imenu
+	url = https://github.com/fernando-jascovich/kotlin-imenu.el.git
