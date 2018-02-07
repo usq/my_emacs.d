@@ -183,17 +183,34 @@ MStartValue: ")
   "Convert aa_bb to aaBb in region."
   (interactive)
   (when (use-region-p)
-    (message "foo")
     (let ((regex "\\([a-z]\\)_\\([a-z]\\)"))
       (goto-char (region-beginning))
       (while (re-search-forward regex nil t)
 	(replace-match (concat (match-string 1) (upcase (match-string 2)))
 		       t)))))
 
+(defun camel-case-to_snake_case ()
+  (interactive)
+  (let* ((bounds (bounds-of-thing-at-point 'symbol))
+	 (word (buffer-substring-no-properties (car bounds) (cdr bounds)))
+	 (regex "\\([a-z][A-Z]\\)"))
+    (message "%s" word)
+
+    )
+  )
+
 (defun mc-open-file-at-point ()
   (interactive)
   (start-process "external" nil "open" (dired-get-filename)))
 
+
+(defun zoom-text-in ()
+  (interactive)
+  (text-scale-increase 1))
+
+(defun zoom-text-out ()
+  (interactive)
+  (text-scale-decrease 1))
 
 (provide 'my-misc)
 ;;; my-misc ends here

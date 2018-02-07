@@ -92,7 +92,8 @@
   (add-hook 'lisp-interaction-mode-hook 'enable-paredit-mode)
   (add-hook 'json-mode-hook 'enable-paredit-mode))
 
-
+(use-package groovy-mode :defer t)
+(use-package gradle-mode :defer t)
 (use-package auctex-latexmk :defer t)
 (use-package typescript-mode :defer t)
 (use-package angular-mode :defer t)
@@ -267,11 +268,24 @@
 (use-package rainbow-delimiters)
 (use-package color-theme)
 
+
+(use-package panda-theme
+  :ensure t
+  :config
+  (load-theme 'panda t))
+
 ;;; https://belak.github.io/base16-emacs/
+
+
+;;(set-frame-font "Hack 12" nil t)
+(set-frame-font "Source Code Pro 13" nil t)
+
 (use-package base16-theme
   :ensure t
   :config
-  (load-theme 'base16-materia t))
+  ;; old theme
+  ;;(load-theme 'base16-materia t)
+  )
 
 (defun light-theme ()
   (interactive)
@@ -412,13 +426,17 @@
 (add-to-list 'load-path (concat user-emacs-directory "repos/org-kanban"))
 (load-file (concat user-emacs-directory "repos/org-kanban/org-kanban.el"))
 
-(require 'kotlin-imenu)
+
+
+
+(require 'server)
+(add-hook 'after-init-hook (lambda ()
+                             (unless (or (daemonp) (server-running-p))
+                               (server-start)
+                               (setq server-raise-frame t))))
 
 
 (find-file "~/Dropbox/org/qm.org")
 
-(require 'server)
-(unless (server-running-p)
-  (server-start))
 
 ;;; init.el ends here
