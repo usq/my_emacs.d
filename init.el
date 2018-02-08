@@ -262,80 +262,10 @@
   :config
   (powerline-default-theme))
 
-
 (use-package rainbow-delimiters)
-(use-package color-theme)
 
-
-(use-package panda-theme
-  :ensure t
-  :config
-  (load-theme 'panda t))
-
-;;; https://belak.github.io/base16-emacs/
-
-
-;;(set-frame-font "Hack 12" nil t)
-(set-frame-font "Source Code Pro 13" nil t)
-
-(use-package base16-theme
-  :ensure t
-  :config
-  ;; old theme
-  ;;(load-theme 'base16-materia t)
-  )
-
-(defun light-theme ()
-  (interactive)
-  (load-theme 'base16-atelier-lakeside-light t))
-
-(defun light-theme2 ()
-  (interactive)
-  (load-theme 'base16-summerfruit-light t))
-
-(defun light-theme3 ()
-  (interactive)
-  (load-theme 'base16-atelier-cave-light t))
-
-
-(defun dark-theme ()
-  (interactive)
-  (load-theme 'base16-materia t))
-
-(defun dark-theme2 ()
-  (interactive)
-  (load-theme 'base16-monokai t))
-
-(defun dark-theme3 ()
-  (interactive)
-  (load-theme 'base16-nord t))
-
-(defun dark-theme4 ()
-  (interactive)
-  (load-theme 'base16-onedark t))
-
-(defun dark-theme5 ()
-  (interactive)
-  (load-theme 'base16-oceanicnext t))
 
 ;;;; follow-mode!!!!!!!!!!!!!!!!!
-
-;; (use-package spacemacs-theme
-;;   :defer t
-;;   :init
-;;   (load-theme 'spacemacs-dark t))
-
-;; (defun light-theme ()
-;;   "Switch to light theme."
-;;   (interactive)
-;;   (load-theme 'spacemacs-light t))
-;; (defun dark-theme ()
-;;   "Switch to dark theme."
-;;   (interactive)
-;;   (load-theme 'spacemacs-dark t))
-
-
-
 
 ;;look at workgroups
 ;;https://github.com/pashinin/workgroups2
@@ -353,7 +283,6 @@
 	  helm-apropos-fuzzy-match t)))
 
 (use-package rotate :defer t)
-
 (use-package json-snatcher :defer t)
 
 ;; hydra
@@ -375,7 +304,7 @@
 (use-package flycheck-kotlin)
 (use-package kotlin-mode)
 
-
+(require 'themes)
 (require 'mac)
 (require 'tex)
 

@@ -60,6 +60,12 @@
       (switch-to-buffer-other-window output)
       (insert (shell-command-to-string (string-join (cons "kaylee" args) " ")))
       ))
+
+  (defun kaylee-clone (platform fw)
+    (interactive
+     "Mplatform:
+Mframework:")
+    (kaylee--run-cmd (list "clone" platform fw)))
   
   (defun kaylee-build ()
     (interactive)
@@ -95,8 +101,8 @@
 
   (defun kaylee-info (platform fw)
     (interactive
-     "Mplatform: 
-Mframework: ")
+     "Mplatform:
+Mframework:")
     (kaylee--run-sync-cmd (list "info" platform fw))
     
     (with-current-buffer "*kaylee-output*"
