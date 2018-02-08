@@ -37,7 +37,6 @@
 	       '(nxml-mode
 		 "<!--\\|<[^/>]*[^/]>"
 		 "-->\\|</[^/>]*[^/]>"
-
 		 "<!--"
 		 sgml-skip-tag-forward
 		 nil))
@@ -141,9 +140,6 @@
 (use-package simple-httpd)
 (use-package cmake-mode)
 
-;;(use-package xquery-mode
-;;  :mode (("\\.xqm\\'" . xquery-mode)))
-
 (use-package reveal-in-osx-finder :defer t)
 
 (use-package exec-path-from-shell
@@ -182,7 +178,10 @@
         org-src-tab-acts-natively t
         org-confirm-babel-evaluate nil
 	org-agenda-ndays 7
+	org-clock-in-resume t
+	org-clock-report-include-clocking-task t
 	org-agenda-window-setup 'current-window
+	org-agenda-span 1 ;;start agenda in day instead week
         org-todo-keywords '((sequence "TODO(t)" "|" "DOING(g)" "WAITING(w)" "|" "DONE(d)")
                             (sequence "|" "CANCELED(c)")))
   (add-to-list 'auto-mode-alist '("\\.txt\\'" . org-mode))
@@ -229,12 +228,11 @@
 (advice-add 'org-clocktable-indent-string :override #'my-org-clocktable-indent-string)
 
 
-
 ;;;; look at https://www.suenkler.info/notes/emacs-config/
 (use-package neotree
   :ensure t
-  :config (setq neo-window-width 40))
-(define-key global-map (kbd "<f1>") 'neotree)
+  :config (setq neo-window-width 40)
+  :bind ("C-c t" . neotree))
 
 (use-package which-key
   :config
