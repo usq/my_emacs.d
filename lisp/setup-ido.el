@@ -42,8 +42,8 @@
 (ido-at-point-mode)
 
 ;; Use ido everywhere
-(require 'ido-ubiquitous)
-(ido-ubiquitous-mode 1)
+;;(require 'ido-ubiquitous)
+;;(ido-ubiquitous-mode 1)
 
 ;; Always rescan buffer for imenu
 (set-default 'imenu-auto-rescan t)
