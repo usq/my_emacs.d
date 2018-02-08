@@ -1,7 +1,7 @@
 (setq package-enable-at-startup nil)
 (setq package-archives
       ;; Package archives, the usual suspects
-      '(("GNU ELPA"     . "http://elpa.gnu.org/packages/")
+      '(("GNU ELPA"     . "https://elpa.gnu.org/packages/")
         ("MELPA-Stable" . "https://stable.melpa.org/packages/")
         ("MELPA"        . "https://melpa.org/packages/")
 	("MELPA-MILK"   . "https://melpa.milkbox.net/packages/"))
