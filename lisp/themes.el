@@ -11,7 +11,7 @@
   (load-theme 'panda t))
 
 ;;(set-frame-font "Hack 12" nil t)
-(set-frame-font "Source Code Pro 13" nil t)
+;(set-frame-font "Source Code Pro 13" nil t)
 
 ;;; https://belak.github.io/base16-emacs/
 (use-package base16-theme

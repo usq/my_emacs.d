@@ -92,7 +92,6 @@
   (add-hook 'json-mode-hook 'enable-paredit-mode))
 
 (use-package groovy-mode :defer t)
-(use-package gradle-mode :defer t)
 (use-package auctex-latexmk :defer t)
 (use-package typescript-mode :defer t)
 (use-package angular-mode :defer t)
@@ -158,7 +157,6 @@
          ("\\.md\\'" . markdown-mode)
          ("\\.markdown\\'" . markdown-mode))
   :init (setq markdown-command "multimarkdown"))
-
 
 (use-package dimmer
   :init
@@ -347,12 +345,17 @@
 (require 'org-config)
 (require 'qmlog)
 
+(use-package docker
+  :config
+  (setenv "PATH" (concat (getenv "PATH") ":/usr/local/bin"))
+  (setq exec-path (append exec-path '("/usr/local/bin")))
+  (setq explicit-shell-file-name "bash")
+  )
+(use-package docker-tramp)
+
 
 ;;;;; REPOSITORIES
 (add-to-list 'load-path (concat user-emacs-directory "repos"))
-(add-to-list 'load-path (concat user-emacs-directory "repos/org-kanban"))
-(load-file (concat user-emacs-directory "repos/org-kanban/org-kanban.el"))
-
 
 
 
