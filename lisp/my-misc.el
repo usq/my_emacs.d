@@ -176,7 +176,7 @@ MStartValue: ")
 
 (defun mc-orga ()
   (interactive)
-  (find-file-other-window "~/Dropbox/org/qm.org"))
+  (find-file "~/Dropbox/org/qm.org"))
 
 
 (defun snake_case-to-camelCase ()

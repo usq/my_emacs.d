@@ -297,7 +297,6 @@
   (add-hook 'cider-repl-mode-hook #'eldoc-mode)
   (setq cider-repl-use-pretty-printing t))
 
-
 ;; kotlin
 (use-package flycheck-kotlin)
 (use-package kotlin-mode)
@@ -349,15 +348,14 @@
   :config
   (setenv "PATH" (concat (getenv "PATH") ":/usr/local/bin"))
   (setq exec-path (append exec-path '("/usr/local/bin")))
-  (setq explicit-shell-file-name "bash")
-  )
-(use-package docker-tramp)
+  (setq explicit-shell-file-name "bash"))
 
+(use-package docker-tramp)
 
 ;;;;; REPOSITORIES
 (add-to-list 'load-path (concat user-emacs-directory "repos"))
 
-
+(use-package fireplace)
 
 (require 'server)
 (add-hook 'after-init-hook (lambda ()
@@ -368,5 +366,7 @@
 
 (find-file "~/Dropbox/org/qm.org")
 
+;;;todo
+;; check out tabulated-list-mode
 
 ;;; init.el ends here
