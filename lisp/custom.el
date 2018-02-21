@@ -56,6 +56,7 @@
  '(default ((t (:inherit nil :stipple nil :background "#292A2B" :foreground "#E6E6E6" :inverse-video nil :box nil :strike-through nil :overline nil :underline nil :slant normal :weight normal :height 120 :width normal :foundry "nil" :family "Source Code Pro"))))
  '(aw-leading-char-face ((t (:inherit ace-jump-face-foreground :height 3.0))))
  '(font-lock-comment-face ((t (:inherit nil :foreground "#b0b0b0" :slant italic))))
+ '(header-line ((t (:inherit mode-line-inactive :background "gray27" :foreground "#8abeb7"))))
  '(highlight-symbol-face ((t (:inherit highlight :background "gray33"))) t)
  '(mode-line ((t (:foreground "#000000" :background "#dddddd" :box nil))))
  '(mode-line-buffer-id ((t (:foreground "#000000" :bold t))))
