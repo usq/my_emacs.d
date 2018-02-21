@@ -181,23 +181,23 @@
 				   (concat (first p) "=" (second p)))))
 				     pairs)))))
 
-(defun create-fw-task ()
+(defun jira-create-fw-task ()
   (interactive)
   (browse-url (jira-issue-url reporter=conrads project=fw priority=minor type=task platform=ios)))
 
-(defun create-php-story ()
+(defun jira-create-php-story ()
   (interactive)
   (browse-url (jira-issue-url reporter=conrads project=php priority=minor type=story platform=ios)))
 
-(defun create-php-task ()
+(defun jira-create-php-task ()
   (interactive)
   (browse-url (jira-issue-url reporter=conrads project=php priority=minor type=task platform=ios)))
 
-(defun create-kaylee-feedback-ticket ()
+(defun jira-create-kaylee-feedback-ticket ()
   (interactive)
   (browse-url (jira-issue-url reporter=conrads project=serenity priority=minor type=feedback platform=all component=kaylee)))
 
-(defun create-kaylee-bug-ticket ()
+(defun jira-create-kaylee-bug-ticket ()
   (interactive)
   (browse-url (jira-issue-url reporter=conrads project=serenity priority=minor type=bug platform=all component=kaylee)))
 
