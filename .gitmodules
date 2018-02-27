@@ -4,3 +4,6 @@
 [submodule "repos/kotlin-imenu"]
 	path = repos/kotlin-imenu
 	url = https://github.com/fernando-jascovich/kotlin-imenu.el.git
+[submodule "repos/a.el"]
+	path = repos/a.el
+	url = https://github.com/plexus/a.el.git
