@@ -28,4 +28,8 @@ desktop/
 /tramp
 /lisp/hidden.el
 /lisp/_test.el
-/list/flycheck_*
+/list/flycheck_*.el
+/.org-id-locations
+/lisp/tmp-dev.el
+/nov-places
+/request

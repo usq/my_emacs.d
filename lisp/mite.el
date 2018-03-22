@@ -79,7 +79,7 @@ stoDate: ")
 ;;(mc-mite-all-repo-history "~/dev/QM/" "2017-02-27" "2017-02-28")
 
 (defun request-json (json)
-  (let* ((api-key "74bbf7d1c679a8ec")
+  (let* ((api-key mite-api-key)
 	 (api-key-header (concat  "'X-MiteApiKey: " api-key "'"))
 	 (curl-command (concat  "curl -s -H " api-key-header " https://quartett-mobile.mite.yo.lk/" json))
 	 )

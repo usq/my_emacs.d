@@ -4,8 +4,13 @@
 
 (use-package color-theme)
 
+(use-package snazzy-theme
+  :ensure t
+  :config
+  (load-theme 'snazzy t))
 
 (use-package panda-theme
+  :disabled
   :ensure t
   :config
   (load-theme 'panda t))
@@ -25,6 +30,7 @@
   :defer t
   :init
   (load-theme 'spacemacs-dark t))
+
 
 
 (defun light-theme ()

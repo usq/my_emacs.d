@@ -2,7 +2,7 @@
 (require 'json)
 (require 'url)
 (require 'jira-params)
-
+(require 's)
 (define-button-type 'jira-link)
 
 (defun jira-link-insert-buttons (beg end)
@@ -72,26 +72,24 @@
    (json-from-url jql-url
 		  (list `("Authorization" . ,jira-qm-token)))))
 
-(defun list-serenity-issues ()
-  (list-issue-with-jql-url sry-search-url))
-
-(defun list-fw-issues ()
-    (list-issue-with-jql-url fw-search-url))
-
-(defun list-pipa-issues ()
-    (list-issue-with-jql-url pipa-search-url))
 
 (defun jira-sync-fw ()
   (interactive)
-    (jira-sync-issues (list-fw-issues)))
-
-(defun jira-sync-serenity ()
-  (interactive)
-  (jira-sync-issues (list-serenity-issues)))
+  (jira-sync-issues (list-issue-with-jql-url fw-search-url)))
 
 (defun jira-sync-pipa ()
   (interactive)
-  (jira-sync-issues (list-pipa-issues)))
+  (jira-sync-issues (list-issue-with-jql-url pipa-search-url)))
+
+(defun jira-sync-serenity ()
+  (interactive)
+  (jira-sync-issues (list-issue-with-jql-url sry-search-url)))
+
+(defun jira-sync-tickets ()
+  (interactive)
+  (jira-sync-fw)
+  (jira-sync-serenity)
+  (jira-sync-pipa))
 
 (defun jira-cleanup-umlaute (ins)
   (s-replace-all '(("Ã¼" . "ü")
@@ -103,7 +101,9 @@
 (defun jira-sync-issues (j-issues)
   (let* ((issues j-issues)
 	 (content (buffer-substring-no-properties (point-min) (point-max)))
-	 (deduplicated-issues nil))
+	 (deduplicated-issues nil)
+	 (level (org-outline-level))
+	 (stars (s-repeat level "*")))
     (setq deduplicated-issues 
 	  (mapcar (lambda (issue)
 		    (let ((pos (string-match (format "\\[%s\\]" (first issue)) content)))
@@ -120,14 +120,15 @@
 		      (description (jira-cleanup-umlaute (second issue)))
 		      (status (third issue)))
 		  (case ())
-		  (cond ((equalp status "In Progress") (insert (format  "** DOING [%s] %s"  (first issue) description)))
-			((equalp status "Blocked") (insert (format  "** WAITING [%s] %s"  (first issue) description)))
-			(t (insert (format  "** TODO [%s] %s"  (first issue) description)))
+		  (cond ((equalp status "In Progress") (insert (format  "%s DOING [%s] %s" stars (first issue) description)))
+			((equalp status "Blocked") (insert (format  "%s WAITING [%s] %s"  stars (first issue) description)))
+			(t (insert (format  "%s TODO [%s] %s"  stars (first issue) description)))
 			)
 )))
 	  deduplicated-issues))
     (jira-link-mode)
     (jira-link-mode))
+
 
 
 (defun jira-kv-mapping (k v)

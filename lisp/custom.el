@@ -28,6 +28,7 @@
  '(ispell-highlight-face (quote flyspell-incorrect))
  '(magit-diff-use-overlays nil)
  '(magit-log-arguments (quote ("--graph" "--color" "--decorate" "-n256")))
+ '(moody-mode-line-height 23)
  '(org-agenda-files (quote ("~/Dropbox/org/qm.org")))
  '(org-babel-load-languages (quote ((sh . t) (emacs-lisp . t))))
  '(org-capture-templates
@@ -39,15 +40,20 @@
  '(org-support-shift-select nil)
  '(package-selected-packages
    (quote
-    (fireplace irony-server docker panda-theme groovy-mode kotlin-imenu kotlin-mode flycheck-kotlin which-key dimmer angular-mode typescript-mode markdown-preview-mode tidy s slack json-reformat neotree ace-window logview org zen-mode rainbow-delimiters rainbow-delimiter base16-theme landmark emacs-home json-snatcher hilight-symbol highlight-symbol hilight-symbol-mode light-symbol light-symbol-mode hydra tea-time aggressive-indent agressive-indent agressive-indent-mode rotate emacs-rotate color-theme spacemacs-theme xquery-mode spotify-el spotify helm-spotify wolfram color-theme-sanityinc-tomorrow powerline company-jedi projectile google-this sgml cider flycheck Flycheck dirtree gitignore-mode scala-mode markdown-mode exec-path-from-shell cmake-mode sublimity-scroll sublimity slime multiple-cursors mc-mode multiple-cursor-mode swift-mode yasnippet company-sourcekit company browse-kill-ring helm js2-mode undo-tree tex auctex-latexmk auctex djinni-mode reveal-in-osx-finder direx dired-x use-package simple-httpd restclient paradox beacon smartparens monokai-theme smex paredit magit ido-vertical-mode ido-at-point flx-ido ace-jump-mode)))
+    (minions moody org-brain shell-pop dired-subtree dired-plus ibuffer-vc ibuffer-projectile dired+ snazzy-theme asoc nov fireplace irony-server docker panda-theme groovy-mode kotlin-imenu kotlin-mode flycheck-kotlin which-key dimmer angular-mode typescript-mode markdown-preview-mode tidy s slack json-reformat neotree ace-window logview org zen-mode rainbow-delimiters rainbow-delimiter base16-theme landmark emacs-home json-snatcher hilight-symbol highlight-symbol hilight-symbol-mode light-symbol light-symbol-mode hydra tea-time aggressive-indent agressive-indent agressive-indent-mode rotate emacs-rotate color-theme spacemacs-theme xquery-mode spotify-el spotify helm-spotify wolfram color-theme-sanityinc-tomorrow powerline company-jedi projectile google-this sgml cider flycheck Flycheck dirtree gitignore-mode scala-mode markdown-mode exec-path-from-shell cmake-mode sublimity-scroll sublimity slime multiple-cursors mc-mode multiple-cursor-mode swift-mode yasnippet company-sourcekit company browse-kill-ring helm js2-mode undo-tree tex auctex-latexmk auctex djinni-mode reveal-in-osx-finder direx dired-x use-package simple-httpd restclient paradox beacon smartparens monokai-theme smex paredit magit ido-vertical-mode ido-at-point flx-ido ace-jump-mode)))
  '(pcomplete-ignore-case t)
  '(pos-tip-background-color "#A6E22E")
  '(pos-tip-foreground-color "#272822")
  '(powerline-default-separator (quote arrow-fade))
+ '(request-log-level (quote debug))
+ '(request-message-level (quote debug))
  '(scroll-bar-mode nil)
+ '(shell-pop-universal-key "C-t")
  '(show-paren-mode t)
  '(weechat-color-list
    (unspecified "#272822" "#20240E" "#F70057" "#F92672" "#86C30D" "#A6E22E" "#BEB244" "#E6DB74" "#40CAE4" "#66D9EF" "#FB35EA" "#FD5FF0" "#74DBCD" "#A1EFE4" "#F8F8F2" "#F8F8F0")))
+
+
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -55,13 +61,11 @@
  ;; If there is more than one, they won't work right.
  '(default ((t (:inherit nil :stipple nil :background "#292A2B" :foreground "#E6E6E6" :inverse-video nil :box nil :strike-through nil :overline nil :underline nil :slant normal :weight normal :height 120 :width normal :foundry "nil" :family "Source Code Pro"))))
  '(aw-leading-char-face ((t (:inherit ace-jump-face-foreground :height 3.0))))
+ '(company-scrollbar-fg ((t (:background "gray55"))))
  '(font-lock-comment-face ((t (:inherit nil :foreground "#b0b0b0" :slant italic))))
  '(header-line ((t (:inherit mode-line-inactive :background "gray27" :foreground "#8abeb7"))))
  '(highlight-symbol-face ((t (:inherit highlight :background "gray33"))) t)
- '(mode-line ((t (:foreground "#000000" :background "#dddddd" :box nil))))
- '(mode-line-buffer-id ((t (:foreground "#000000" :bold t))))
- '(mode-line-buffer-id-inactive ((t (:inherit mode-line-buffer-id))))
- '(mode-line-inactive ((t (:foreground "#000000" :background "#bbbbbb" :box nil))))
+ '(mode-line ((t (:foreground "#a5a5a9" :box nil :weight normal))))
  '(org-hide ((t (:inherit default :background "#263238" :foreground "#263238"))))
  '(powerline-active1 ((t (:background "Black" :foreground "White"))))
  '(powerline-active2 ((t (:background "#34352E" :foreground "white"))))

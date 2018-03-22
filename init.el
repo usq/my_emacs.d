@@ -1,6 +1,11 @@
 ;;; package --- Summary
 ;;; Commentary:
 ;;; Code:
+
+;; https://www.reddit.com/r/emacs/comments/3kqt6e/2_easy_little_known_steps_to_speed_up_emacs_start/
+(defvar mc/gc-cons-threshold--orig gc-cons-threshold)
+(setq gc-cons-threshold (* 100 1024 1024)) ;100 MB before garbage collection
+
 (package-initialize)
 
 (setq message-log-max 10000)
@@ -12,7 +17,6 @@
 (setq load-prefer-newer t)
 
 (require 'packages)
-
 (when (not (package-installed-p 'use-package))
     (package-refresh-contents)
   (package-install 'use-package))
@@ -28,7 +32,7 @@
   :config
   (global-aggressive-indent-mode 1))
 
-(use-package dash  :defer t)
+
 (use-package sgml-mode  :defer t)
 (use-package hideshow
   :defer t
@@ -54,9 +58,20 @@
   :bind
   ("C-x m" . magit-status))
 
+
 (use-package ibuffer
   :bind
   ("C-x C-b" . ibuffer))
+
+(use-package ibuffer-vc
+  :config
+  (add-hook 'ibuffer-hook (lambda ()
+			    (ibuffer-auto-mode 1)
+			    (ibuffer-vc-set-filter-groups-by-vc-root)
+			    (unless (eq ibuffer-sorting-mode 'alphabetic)
+			      (ibuffer-do-sort-by-alphabetic))
+			    )))
+
 
 (use-package multiple-cursors
   :defer t
@@ -201,6 +216,7 @@
   (org-babel-do-load-languages
    'org-babel-load-languages
    '((sh . t)
+     (shell . t)
      (python . t)
      (dot . t)
      (latex . t)
@@ -225,6 +241,9 @@
       (concat str "-> "))))
 (advice-add 'org-clocktable-indent-string :override #'my-org-clocktable-indent-string)
 
+
+(use-package dash  :defer t)
+(use-package request :defer t)
 
 ;;;; look at https://www.suenkler.info/notes/emacs-config/
 (use-package neotree
@@ -256,6 +275,7 @@
   (setq wolfram-alpha-app-id "7L7LE4-HHWQGE9TG6"))
 
 (use-package powerline
+  :disabled t
   :ensure t
   :config
   (powerline-default-theme))
@@ -343,7 +363,7 @@
 (require 'zen-mode)
 (require 'org-config)
 (require 'qmlog)
-
+(require 'mite-mode)
 (use-package docker
   :config
   (setenv "PATH" (concat (getenv "PATH") ":/usr/local/bin"))
@@ -353,9 +373,42 @@
 (use-package docker-tramp)
 
 ;;;;; REPOSITORIES
-(add-to-list 'load-path (concat user-emacs-directory "repos"))
+;;(add-to-list 'load-path (concat user-emacs-directory "repos/" "a.el"))
 
-(use-package fireplace)
+;; ebook reader
+(use-package nov)
+
+;; from http://pragmaticemacs.com/category/dired/
+(use-package dired-subtree
+  :config
+  (bind-keys :map dired-mode-map
+             ("i" . dired-subtree-insert)
+             (";" . dired-subtree-remove)))
+
+;; checkout https://github.com/Kungsgeten/org-brain/blob/master/README.org
+(use-package org-brain :ensure t
+  :init
+  (setq org-brain-path "~/Dropbox/orga/mindmap")
+  :config
+  (setq org-id-track-globally t)
+  (setq org-id-locations-file "~/.emacs.d/.org-id-locations")
+  
+  ;; (push '("b" "Brain" plain (function org-brain-goto-end)
+  ;;         "* %i%?" :empty-lines 1)
+  ;;       org-capture-templates)
+  (setq org-brain-visualize-default-choices 'all)
+  (setq org-brain-title-max-length 12))
+
+  (use-package moody
+    :config
+    (setq moody-slant-function 'moody-slant-apple-rgb)
+    (setq x-underline-at-descent-line t)
+    (setq moody-mode-line-height 20)
+    (moody-replace-mode-line-buffer-identification)
+    (moody-replace-vc-mode))
+
+
+(use-package minions)
 
 (require 'server)
 (add-hook 'after-init-hook (lambda ()
@@ -364,9 +417,35 @@
                                (setq server-raise-frame t))))
 
 
+(global-auto-revert-mode 1)
+(add-hook 'dired-mode-hook 'auto-revert-mode)
+
+(defun bjm/kill-this-buffer ()
+  "Kill the current buffer."
+  (interactive)
+  (kill-buffer (current-buffer)))
+
+
+
+
+
+(global-set-key (kbd "C-x k") 'bjm/kill-this-buffer)
+
+(setq gc-cons-threshold mc/gc-cons-threshold--orig)
+
 (find-file "~/Dropbox/org/qm.org")
+
+; (setq browse-url-browser-function 'eww-browse-url)
+;; (set-frame-font "DejaVu Sans Mono-14" nil t)
+;; (set-frame-font "Fantasque Sans Mono-16" nil t)
+;; (set-frame-font "Source Code Pro-14" nil t)
+;; (set-frame-font "Monaco-14" nil t)
+;; (set-frame-font "Cousine-14" nil t)
+
+;;maybe look at https://github.com/roman/golden-ratio.el
 
 ;;;todo
 ;; check out tabulated-list-mode
 
 ;;; init.el ends here
+(put 'dired-find-alternate-file 'disabled nil)
