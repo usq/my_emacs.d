@@ -29,7 +29,7 @@
  '(magit-diff-use-overlays nil)
  '(magit-log-arguments (quote ("--graph" "--color" "--decorate" "-n256")))
  '(moody-mode-line-height 23)
- '(org-agenda-files (quote ("~/Dropbox/org/qm.org")))
+ '(org-agenda-files (quote ("~/dev/QM/qm.org")))
  '(org-babel-load-languages (quote ((sh . t) (emacs-lisp . t))))
  '(org-capture-templates
    (quote
@@ -47,6 +47,26 @@
  '(powerline-default-separator (quote arrow-fade))
  '(request-log-level (quote debug))
  '(request-message-level (quote debug))
+ '(safe-local-variable-values
+   (quote
+    ((eval unless
+	   (featurep
+	    (quote swiftpm-project-settings))
+	   (message "loading 'swiftpm-project-settings")
+	   (add-to-list
+	    (quote load-path)
+	    (concat
+	     (let
+		 ((dlff
+		   (dir-locals-find-file default-directory)))
+	       (if
+		   (listp dlff)
+		   (car dlff)
+		 (file-name-directory dlff)))
+	     "Utilities/Emacs")
+	    :append)
+	   (require
+	    (quote swiftpm-project-settings))))))
  '(scroll-bar-mode nil)
  '(shell-pop-universal-key "C-t")
  '(show-paren-mode t)
@@ -61,6 +81,7 @@
  ;; If there is more than one, they won't work right.
  '(default ((t (:inherit nil :stipple nil :background "#292A2B" :foreground "#E6E6E6" :inverse-video nil :box nil :strike-through nil :overline nil :underline nil :slant normal :weight normal :height 120 :width normal :foundry "nil" :family "Source Code Pro"))))
  '(aw-leading-char-face ((t (:inherit ace-jump-face-foreground :height 3.0))))
+ '(cider-fringe-good-face ((t (:background "green4" :foreground "light green"))))
  '(company-scrollbar-fg ((t (:background "gray55"))))
  '(font-lock-comment-face ((t (:inherit nil :foreground "#b0b0b0" :slant italic))))
  '(header-line ((t (:inherit mode-line-inactive :background "gray27" :foreground "#8abeb7"))))

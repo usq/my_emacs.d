@@ -22,11 +22,17 @@
 					      (interactive) (kaylee-open)))
   (define-key kaylee-mode-map (kbd "C-c k") (lambda ()
 					      (interactive) (kaylee-switch)))
+  (define-key kaylee-mode-map (kbd "C-c d") (lambda ()
+					      (interactive) (kaylee-dirty-projects)))
+  
+  (define-key kaylee-mode-map (kbd "C-c i") #'kaylee-projectinfo-at-point)
+
+  
   (setq-local kaylee-font-lock-keywords
       (let ((keywords '("~>" "==" ">=")))
         (let (
               (keywords-regexp  (regexp-opt keywords 'words))
-              (fw-pf-regexp      "^\\([.a-zA-Z-0-9\\/]+\\) +\\([a-zA-Z-]+\\) +\\(src:\\|~>\\|==\\|>=\\) *\\([.a-zA-Z0-9-/]+\\)")
+              (fw-pf-regexp      "^\\([.a-zA-Z-0-9\\/]+\\) +\\([a-zA-Z-]+\\) +\\(src:\\|~>\\|==\\|>=\\) *\\([.a-zA-Z0-9_/-]+\\)")
               (comments-regexp1 "#.*")
               (comments-regexp2 "//.*")
               )
@@ -66,8 +72,17 @@
 
     (let ((output (get-buffer-create "*kaylee-output*")))
       (switch-to-buffer-other-window output)
-      (insert (shell-command-to-string (string-join (cons "kaylee" args) " ")))))
+      (with-current-buffer output
+	(insert (shell-command-to-string (string-join (cons "kaylee" args) " "))))))
 
+  (defun kaylee-projectinfo-at-point ()
+    (interactive)
+    (let* ((current-line (thing-at-point 'line t))
+	   (components (split-string current-line))
+	   (fw (first components))
+	   (pf (second components)))
+      (kaylee-info pf fw)))
+  
   (defun kaylee-clone (platform fw)
     (interactive
      "Mplatform:
@@ -155,6 +170,18 @@ Mframework:")
     (insert-file-contents filePath)
     (split-string (buffer-string) "\n" t)))
 
+  (defun kaylee--project-from-string (cat-str)
+    (let* ((parts (s-split " " cat-str))
+	   (branchparts (s-split ":" (third parts)))
+	   (branchname (second branchparts))
+	   (fwname (concat (first parts) " " (second parts) " src:" branchname))
+	   )
+      
+      `((name . ,(first parts))
+	(platform . ,(second parts))
+	(branch . ,branchname)))
+    )
+  
 (defun kaylee--src-fws-in-catalyzerfixed (path)
   (let* ((catlines (kaylee--read-lines path))
        (filtered (cl-remove-if-not (lambda (x)  (and (not (s-starts-with-p "#" x))
@@ -170,19 +197,39 @@ Mframework:")
 		    filtered)))
     fws))
 
+(defun kaylee--repo-dirty? (repo)
+  (let* ((gitpath (concat "Serenity/Projects/" (cdr (assoc 'platform repo))
+			 "/" (cdr (assoc 'name repo))))
+	 (result (shell-command-to-string (concat "git --git-dir=" gitpath "/.git --work-tree=" gitpath "  status --porcelain "))))
+    (not (s-blank-str-p (s-replace "\n" "" result)))))
+
 
   (defun kaylee-switch ()
-  "Switch between Catalyzer and Catalyzer.fixed."
-  (interactive)
-  (let* ((fws (kaylee--src-fws-in-catalyzerfixed "Catalyzer.fixed"))
-	 (selection (ido-completing-read "Select " fws))
-	 (selparts (s-split " " selection))
-	 (fwname (first selparts))
-	 (fwplatform (second selparts)))
+    "Switch between Catalyzer and Catalyzer.fixed."
+    (interactive)
+    (let ((fws (kaylee--src-fws-in-catalyzerfixed "Catalyzer.fixed")))
+      (if (null fws)
+	  (message "No src: dependency found")
+	(kaylee--query-user-for-selection "Select source dependency:" fws))))
+
+(defun kaylee--query-user-for-selection (query fws)
+  (kaylee--open-selection (ido-completing-read query fws)))
+
+(defun kaylee--open-selection (selection)
+  (let* ((selparts (s-split " " selection))
+	(fwname (first selparts))
+	(fwplatform (second selparts)))
     (find-file-other-window (concat "Serenity/Projects/" fwplatform "/" fwname "/Catalyzer"))))
 
-  
-    )
+(defun kaylee-dirty-projects ()
+  "List projects where statis is not clean"
+  (interactive)
+  (let* ((fws (kaylee--src-fws-in-catalyzerfixed "Catalyzer.fixed"))
+	 (projects (mapcar #'kaylee--project-from-string fws))
+	 (dirty-repos (-filter #'kaylee--repo-dirty?  projects)))
+          (if (null dirty-repos)
+	      (message "No src dependency dirty!")
+	    (kaylee--query-user-for-selection "Select dirty repo:" (-map (lambda (r) (concat (cdr (assoc 'name r)) " " (cdr (assoc 'platform r)) " src:" (cdr (assoc 'branch r)))) dirty-repos)))))) ;; end kaylee-mode
 
 
 

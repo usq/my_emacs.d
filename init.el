@@ -63,7 +63,10 @@
   :bind
   ("C-x C-b" . ibuffer))
 
+
+
 (use-package ibuffer-vc
+  :disabled t
   :config
   (add-hook 'ibuffer-hook (lambda ()
 			    (ibuffer-auto-mode 1)
@@ -433,7 +436,8 @@
 
 (setq gc-cons-threshold mc/gc-cons-threshold--orig)
 
-(find-file "~/Dropbox/org/qm.org")
+
+(mc-orga)
 
 ; (setq browse-url-browser-function 'eww-browse-url)
 ;; (set-frame-font "DejaVu Sans Mono-14" nil t)
