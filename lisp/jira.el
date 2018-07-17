@@ -5,6 +5,8 @@
 (require 's)
 (define-button-type 'jira-link)
 
+
+
 (defun jira-link-insert-buttons (beg end)
   (remove-overlays beg end 'type 'jira-link)
   (save-excursion
@@ -128,6 +130,16 @@
 	  deduplicated-issues))
     (jira-link-mode)
     (jira-link-mode))
+
+
+
+;; (defclass ticket ()
+;;   ((number :initarg :num
+;; 	   :documentation "a number")))
+
+;; (defmethod hello ((tick ticket))
+;;   (message "hello %s" (oref tick :num)))
+
 
 
 

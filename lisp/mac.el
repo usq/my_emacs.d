@@ -23,8 +23,8 @@
 (defvar ispell-program-name)
 (setq ispell-program-name "/usr/local/bin/aspell")
 
-(defvar ido-ignore-files)
-(add-to-list 'ido-ignore-files "\\.DS_Store")
+;;(defvar ido-ignore-files)
+;;(add-to-list 'ido-ignore-files "\\.DS_Store")
 
 ;; backup in temp dir
 (setq backup-directory-alist

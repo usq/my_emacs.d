@@ -26,14 +26,15 @@
 (use-package exec-path-from-shell
   :init (exec-path-from-shell-initialize))
 
-;; always indet everything
+;; always indent everything
 (use-package aggressive-indent
   :defer t
   :config
   (global-aggressive-indent-mode 1))
 
-
+(use-package yafolding)
 (use-package sgml-mode  :defer t)
+(use-package f)
 (use-package hideshow
   :defer t
   :config
@@ -63,8 +64,6 @@
   :bind
   ("C-x C-b" . ibuffer))
 
-
-
 (use-package ibuffer-vc
   :disabled t
   :config
@@ -74,7 +73,6 @@
 			    (unless (eq ibuffer-sorting-mode 'alphabetic)
 			      (ibuffer-do-sort-by-alphabetic))
 			    )))
-
 
 (use-package multiple-cursors
   :defer t
@@ -95,6 +93,7 @@
   (add-hook 'after-init-hook 'global-company-mode))
 
 (use-package company-jedi
+  :defer t
   :config
   (add-to-list 'company-backends 'company-jedi))
 
@@ -118,21 +117,17 @@
   ("C-x u" . undo-tree-visualize)
   ("C-?" . undo-tree-redo))
 
+;;ivy
 (use-package flx)
-(use-package flx-ido
-  :ensure t
-  :init
-  (setq ido-use-faces nil)
-  :config
-  (flx-ido-mode 1))
-
-(use-package ido-vertical-mode)
-(use-package ido-at-point)
-(use-package ido-completing-read+)
-(use-package smex
+(use-package ivy
   :bind
-  (("M-x" . smex)
-   ("M-X" . smex-major-mode-commands)))
+  (("M-x" . counsel-M-x))
+  :config
+  (setq ivy-initial-inputs-alist nil)
+  (setq ivy-re-builders-alist
+	'((t . ivy--regex-fuzzy)))
+  )
+
 
 (use-package ace-jump-mode
   :defer t
@@ -158,11 +153,13 @@
 (use-package cmake-mode)
 
 (use-package reveal-in-osx-finder :defer t)
-
 (use-package exec-path-from-shell
   :ensure t
   :config
   (exec-path-from-shell-initialize))
+
+(use-package shell-pop
+  :defer t)
 
 (use-package js2-mode
   :bind
@@ -188,7 +185,7 @@
   (setq org-use-speed-commands t
         org-return-follows-link t
         org-hide-emphasis-markers t
-        org-completion-use-ido t
+;;        org-completion-use-ido t
         org-outline-path-complete-in-steps nil
         org-src-fontify-natively t   ;; Pretty code blocks
         org-src-tab-acts-natively t
@@ -218,8 +215,7 @@
                                                   (org-return-indent))))
   (org-babel-do-load-languages
    'org-babel-load-languages
-   '((sh . t)
-     (shell . t)
+   '((shell . t)
      (python . t)
      (dot . t)
      (latex . t)
@@ -268,6 +264,7 @@
        ((t (:inherit ace-jump-face-foreground :height 3.0)))))))
 
 (use-package projectile
+  :ensure t
   :bind
   ("C-c p f" . projectile-find-file)
   ("C-c p p" . projectile-switch-project))
@@ -315,7 +312,6 @@
 ;;clojure
 (use-package cider
   :ensure t
-  :pin MELPA-Stable
   :config
   (add-hook 'cider-repl-mode-hook #'eldoc-mode)
   (setq cider-repl-use-pretty-printing t))
@@ -330,7 +326,6 @@
 
 (require 'appearance)
 
-(require 'setup-ido)
 (require 'setup-magit)
 (require 'setup-latex)
 
@@ -389,26 +384,14 @@
              (";" . dired-subtree-remove)))
 
 ;; checkout https://github.com/Kungsgeten/org-brain/blob/master/README.org
-(use-package org-brain :ensure t
-  :init
-  (setq org-brain-path "~/Dropbox/orga/mindmap")
-  :config
-  (setq org-id-track-globally t)
-  (setq org-id-locations-file "~/.emacs.d/.org-id-locations")
-  
-  ;; (push '("b" "Brain" plain (function org-brain-goto-end)
-  ;;         "* %i%?" :empty-lines 1)
-  ;;       org-capture-templates)
-  (setq org-brain-visualize-default-choices 'all)
-  (setq org-brain-title-max-length 12))
 
-  (use-package moody
-    :config
-    (setq moody-slant-function 'moody-slant-apple-rgb)
-    (setq x-underline-at-descent-line t)
-    (setq moody-mode-line-height 20)
-    (moody-replace-mode-line-buffer-identification)
-    (moody-replace-vc-mode))
+(use-package moody
+  :config
+  (setq moody-slant-function 'moody-slant-apple-rgb)
+  (setq x-underline-at-descent-line t)
+  (setq moody-mode-line-height 20)
+  (moody-replace-mode-line-buffer-identification)
+  (moody-replace-vc-mode))
 
 
 (use-package minions)
@@ -428,14 +411,21 @@
   (interactive)
   (kill-buffer (current-buffer)))
 
+;; use same frame
+(setq ns-pop-up-frames nil)
 
+(add-to-list 'default-frame-alist
+             '(ns-transparent-titlebar . t))
 
-
+(add-to-list 'default-frame-alist
+             '(ns-appearance . dark))
 
 (global-set-key (kbd "C-x k") 'bjm/kill-this-buffer)
 
 (setq gc-cons-threshold mc/gc-cons-threshold--orig)
 
+;;; speedup next-line
+(setq line-move-visual nil)
 
 (mc-orga)
 
@@ -453,3 +443,4 @@
 
 ;;; init.el ends here
 (put 'dired-find-alternate-file 'disabled nil)
+

@@ -1,7 +1,8 @@
 (require 'subr-x)
 (require 'cl-lib)
 (require 'comint)
-
+(require 'seq)
+(require 's)
 
 (define-derived-mode kaylee-mode comint-mode "Inferior Kaylee"
   "Major mode for Kaylee inferior process."
@@ -25,7 +26,12 @@
   (define-key kaylee-mode-map (kbd "C-c d") (lambda ()
 					      (interactive) (kaylee-dirty-projects)))
   
-  (define-key kaylee-mode-map (kbd "C-c i") #'kaylee-projectinfo-at-point)
+  (define-key kaylee-mode-map (kbd "C-c i") (lambda ()
+					      (interactive)
+					      (kaylee-projectinfo-at-point nil)))
+  (define-key kaylee-mode-map (kbd "C-c I") (lambda ()
+					      (interactive)
+					      (kaylee-projectinfo-at-point t)))
 
   
   (setq-local kaylee-font-lock-keywords
@@ -75,13 +81,14 @@
       (with-current-buffer output
 	(insert (shell-command-to-string (string-join (cons "kaylee" args) " "))))))
 
-  (defun kaylee-projectinfo-at-point ()
+  (defun kaylee-projectinfo-at-point (open)
     (interactive)
     (let* ((current-line (thing-at-point 'line t))
 	   (components (split-string current-line))
 	   (fw (first components))
 	   (pf (second components)))
-      (kaylee-info pf fw)))
+      (kaylee-info pf fw open)))
+
   
   (defun kaylee-clone (platform fw)
     (interactive
@@ -144,11 +151,11 @@ Mframework:")
     (interactive)
     (kaylee--run-cmd '("fix")))
 
-  (defun kaylee-info (platform fw)
+  (defun kaylee-info (platform fw open)
     (interactive
      "Mplatform:
 Mframework:")
-    (kaylee--run-sync-cmd (list "info" platform fw))
+    (kaylee--run-sync-cmd (list "info" platform fw (when open "--open")))
     (with-current-buffer "*kaylee-output*"
       (ansi-color-apply-on-region (point-min) (point-max))
       (view-mode 1)
@@ -182,28 +189,27 @@ Mframework:")
 	(branch . ,branchname)))
     )
   
-(defun kaylee--src-fws-in-catalyzerfixed (path)
-  (let* ((catlines (kaylee--read-lines path))
-       (filtered (cl-remove-if-not (lambda (x)  (and (not (s-starts-with-p "#" x))
-						     (s-contains-p "src:" x)))
-				   catlines))
-       (fws (mapcar (lambda (fw)
-		      (let* ((parts (s-split " " fw))
-			     (branchparts (s-split ":" (third parts)) )
-			     (branchname (second branchparts))
-			     (fwname (concat (first parts) " " (second parts) " src:" branchname))
-			     )
-			fwname))
-		    filtered)))
-    fws))
+  (defun kaylee--src-fws-in-catalyzerfixed (path)
+    (let* ((catlines (kaylee--read-lines path))
+	   (filtered (cl-remove-if-not (lambda (x)  (and (not (s-starts-with-p "#" x))
+							 (s-contains-p "src:" x)))
+				       catlines))
+	   (fws (mapcar (lambda (fw)
+			  (let* ((parts (s-split " " fw))
+				 (branchparts (s-split ":" (third parts)) )
+				 (branchname (second branchparts))
+				 (fwname (concat (first parts) " " (second parts) " src:" branchname))
+				 )
+			    fwname))
+			filtered)))
+      fws))
 
-(defun kaylee--repo-dirty? (repo)
-  (let* ((gitpath (concat "Serenity/Projects/" (cdr (assoc 'platform repo))
-			 "/" (cdr (assoc 'name repo))))
-	 (result (shell-command-to-string (concat "git --git-dir=" gitpath "/.git --work-tree=" gitpath "  status --porcelain "))))
-    (not (s-blank-str-p (s-replace "\n" "" result)))))
-
-
+  (defun kaylee--repo-dirty? (repo)
+    (let* ((gitpath (concat "Serenity/Projects/" (cdr (assoc 'platform repo))
+			    "/" (cdr (assoc 'name repo))))
+	   (result (shell-command-to-string (concat "git --git-dir=" gitpath "/.git --work-tree=" gitpath "  status --porcelain "))))
+      (not (s-blank-str-p (s-replace "\n" "" result)))))
+  
   (defun kaylee-switch ()
     "Switch between Catalyzer and Catalyzer.fixed."
     (interactive)
@@ -212,6 +218,64 @@ Mframework:")
 	  (message "No src: dependency found")
 	(kaylee--query-user-for-selection "Select source dependency:" fws))))
 
+
+  (defun --kaylee-current-branch-name-at-path (path)
+    (let* ((result (shell-command-to-string (concat "git --git-dir=" path "/.git --work-tree=" path " rev-parse --abbrev-ref HEAD"))
+		   ))
+      (s-trim-right result)
+      )
+    )
+
+  (defun --kaylee-current-branch-name (cat-str)
+    (let* ((parts (s-split " " cat-str))
+	   (branchname (--kaylee-current-branch-name-at-path (concat "Serenity/Projects/" (second parts) "/" (first parts))
+			    ))
+	       (fwname (concat (first parts) " " (second parts) " src:" branchname))
+	       )
+      
+      `((name . ,(first parts))
+	(platform . ,(second parts))
+	(branch . ,branchname)))
+    )
+
+  (defun replace-src-dep-in-line-with-branch (line branch)
+    (replace-regexp-in-string "src:[a-zA-Z0-9-_/]+" (lambda (match)
+							  (concat "src:" branch)
+							  )
+			      line)
+    )
+
+  
+  
+  (defun kaylee-insert-branch-name ()
+    (interactive)
+    (let* (
+	   (current-line (thing-at-point 'line t))
+	   (components (split-string current-line))
+	   (fw (first components))
+	   (pf (second components))
+	   (fws (kaylee--src-fws-in-catalyzerfixed "Catalyzer.fixed"))
+	   (project (first (seq-filter (lambda (el)
+					 (and
+					  (equalp fw (cdr (assoc 'name el) ))
+					  (equalp pf (cdr (assoc 'platform el))))
+					 )
+				       (mapcar #'--kaylee-current-branch-name fws))))
+	   )
+
+
+      
+      (if (null fw)
+	  (message "Point not at dependency")
+	(if (null project)
+	    (message "No src: dependency found for or no Catalyzer.fixed found")
+	  (progn
+	    (kill-whole-line)
+	    (insert (replace-src-dep-in-line-with-branch current-line (cdr (assoc 'branch project))))
+	    )
+	  (message "-> %s" project)))))
+
+  
 (defun kaylee--query-user-for-selection (query fws)
   (kaylee--open-selection (ido-completing-read query fws)))
 

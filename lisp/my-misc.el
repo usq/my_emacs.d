@@ -1,5 +1,6 @@
 
 (require 'js2-mode)
+(require 'f)
 (defun add-format-json-to-js2-mode () (define-key js2-mode-map (kbd "C-x TAB") 'json-format))
 (add-hook 'js2-mode-hook 'add-format-json-to-js2-mode)
 
@@ -15,7 +16,12 @@
   (interactive
    "Menterall: 
 ")
- 
+
+  (defun named (x)
+    (if (symbolp x)
+	(symbol-name x)
+      (number-to-string x)))
+
   (let* ((m (get-m))
 	 (l (subseq (split-string all "") 1 7))
 	 (e1 (subseq l 0 2))
@@ -26,9 +32,9 @@
 	      (string-to-number (second e1)) m))
 	 (t2 (acc-map (intern (first e2)) (string-to-number (second e2)) m))
 	 (t3 (acc-map (intern (first e3)) (string-to-number (second e3)) m))
-	 (final (concat (symbol-name t1)
-		     (symbol-name t2)
-		     (symbol-name t3))))
+	 (final (concat (named t1)
+		     (named t2)
+		     (named t3))))
     (paste-to-osx final)
     (message final)))
 
@@ -99,7 +105,23 @@ MStartValue: ")
 
 (defun gittower ()
   (interactive)
-  (shell-command "gittower ."))
+  (let ((tries 0)
+	(found nil)
+	(dir (f-dirname (f-this-file))))
+
+    (while (and (< tries 5)
+		(null found))
+      
+      (if (f-exists? (f-join dir ".git"))
+	  (progn
+	    (setq found t)
+	    (shell-command (concat "gittower " dir)))
+	(progn
+	  (incf tries)
+	  (setq (apply #'f-join (butlast (f-split dir)))))))))
+
+
+
 
 (defun pwd-kill ()
   (interactive)

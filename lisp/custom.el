@@ -4,6 +4,7 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
+ '(auto-revert-verbose nil)
  '(compilation-message-face (quote default))
  '(custom-enabled-themes (quote (sanityinc-tomorrow-night)))
  '(custom-safe-themes
@@ -40,7 +41,7 @@
  '(org-support-shift-select nil)
  '(package-selected-packages
    (quote
-    (minions moody org-brain shell-pop dired-subtree dired-plus ibuffer-vc ibuffer-projectile dired+ snazzy-theme asoc nov fireplace irony-server docker panda-theme groovy-mode kotlin-imenu kotlin-mode flycheck-kotlin which-key dimmer angular-mode typescript-mode markdown-preview-mode tidy s slack json-reformat neotree ace-window logview org zen-mode rainbow-delimiters rainbow-delimiter base16-theme landmark emacs-home json-snatcher hilight-symbol highlight-symbol hilight-symbol-mode light-symbol light-symbol-mode hydra tea-time aggressive-indent agressive-indent agressive-indent-mode rotate emacs-rotate color-theme spacemacs-theme xquery-mode spotify-el spotify helm-spotify wolfram color-theme-sanityinc-tomorrow powerline company-jedi projectile google-this sgml cider flycheck Flycheck dirtree gitignore-mode scala-mode markdown-mode exec-path-from-shell cmake-mode sublimity-scroll sublimity slime multiple-cursors mc-mode multiple-cursor-mode swift-mode yasnippet company-sourcekit company browse-kill-ring helm js2-mode undo-tree tex auctex-latexmk auctex djinni-mode reveal-in-osx-finder direx dired-x use-package simple-httpd restclient paradox beacon smartparens monokai-theme smex paredit magit ido-vertical-mode ido-at-point flx-ido ace-jump-mode)))
+    (ivy yafolding f ido-completing-read+ cider minions moody org-brain shell-pop dired-subtree dired-plus ibuffer-vc ibuffer-projectile dired+ snazzy-theme asoc nov fireplace irony-server docker panda-theme groovy-mode kotlin-imenu kotlin-mode flycheck-kotlin which-key dimmer angular-mode typescript-mode markdown-preview-mode tidy s slack json-reformat neotree ace-window logview org zen-mode rainbow-delimiters rainbow-delimiter base16-theme landmark emacs-home json-snatcher hilight-symbol highlight-symbol hilight-symbol-mode light-symbol light-symbol-mode hydra tea-time aggressive-indent agressive-indent agressive-indent-mode rotate emacs-rotate color-theme spacemacs-theme xquery-mode spotify-el spotify helm-spotify wolfram color-theme-sanityinc-tomorrow powerline company-jedi projectile google-this sgml flycheck Flycheck dirtree gitignore-mode scala-mode markdown-mode exec-path-from-shell cmake-mode sublimity-scroll sublimity slime multiple-cursors mc-mode multiple-cursor-mode swift-mode yasnippet company-sourcekit company browse-kill-ring helm js2-mode undo-tree tex auctex-latexmk auctex djinni-mode reveal-in-osx-finder direx dired-x use-package simple-httpd restclient paradox beacon smartparens monokai-theme paredit magit ido-vertical-mode ido-at-point flx-ido ace-jump-mode)))
  '(pcomplete-ignore-case t)
  '(pos-tip-background-color "#A6E22E")
  '(pos-tip-foreground-color "#272822")
@@ -68,6 +69,7 @@
 	   (require
 	    (quote swiftpm-project-settings))))))
  '(scroll-bar-mode nil)
+ '(shell-pop-shell-type (quote ("shell" "*shell*" (lambda nil (eshell)))))
  '(shell-pop-universal-key "C-t")
  '(show-paren-mode t)
  '(weechat-color-list

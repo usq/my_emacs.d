@@ -5,12 +5,13 @@
 (use-package color-theme)
 
 (use-package snazzy-theme
+
   :ensure t
   :config
   (load-theme 'snazzy t))
 
 (use-package panda-theme
-  :disabled
+  :disabled t
   :ensure t
   :config
   (load-theme 'panda t))
@@ -20,13 +21,13 @@
 
 ;;; https://belak.github.io/base16-emacs/
 (use-package base16-theme
-  :disabled
+  :disabled t
   :ensure t
   :config
   (load-theme 'base16-materia t))
 
 (use-package spacemacs-theme
-  :disabled
+  :disabled t
   :defer t
   :init
   (load-theme 'spacemacs-dark t))
