@@ -7,6 +7,7 @@
 (defvar lineregexp nil)
 (defvar qmlog-mode-map nil "Keymap for `qmlog-mode'.")
 (defvar -qmlog-start-regex nil)
+(defvar -qmlog-hidden-logs '())
 
 ;; collapse all
 ;; filter log level
@@ -15,29 +16,29 @@
   (concat "\\(" str "\\)"))
 
 (let* ((loglevel "[VDIE]")
-       (timestamp "[0-9][0-9]:[0-9][0-9]:[0-9][0-9].[0-9][0-9][0-9]")
+       (timestamp "\\([0-9][0-9]\\)/\\([0-9][0-9]\\)/\\([0-9][0-9]\\) [0-9][0-9]:[0-9][0-9]:[0-9][0-9].[0-9][0-9][0-9]")
        (modulename "[a-zA-Z]+")
        (ignore1 "([0-9]+)")
        (location "\\[\\([A-Za-z]+\\) -?\\([\\[(_:)a-z A-Z]+\\]?\\(?:_block_invoke\\(?:_2\\)?\\)?\\):\\([0-9]+\\)\\]"))
 
   (setq -qmlog-start-regex (concat "^" loglevel " " timestamp))
-    (setq lineregexp (concat "^"
+  (setq lineregexp (concat "^"
 			   (mc-re-group loglevel) " "
 			   (mc-re-group timestamp) " "
 			   "\\[" (mc-re-group modulename) "\\]"
 			   (mc-re-group ignore1) "[\t]+"
 			   location " - "
-			   "\\(.*\\)")))
+			   "\\(.*\\)"))
 
-(setq qmlog-font-lock-defaults
-      `((,lineregexp (1 font-lock-function-name-face)
-		     (2 font-lock-variable-name-face)
-		     (3 font-lock-type-face)
-		     (4 font-lock-comment-delimiter-face)
-		     (5 font-lock-constant-face)
-		     (6 font-lock-function-name-face)
-		     (7 font-lock-variable-name-face)
-		     )))
+  (setq qmlog-font-lock-defaults
+	`((,lineregexp (1 font-lock-function-name-face)
+		       (2 font-lock-variable-name-face)
+		       (3 font-lock-type-face)
+		       (4 font-lock-comment-delimiter-face)
+		       (5 font-lock-constant-face)
+		       (6 font-lock-function-name-face)
+		       (7 font-lock-variable-name-face)
+		       ))))
 
 (defun qmlog-prev-line ()
   "Go to previous log message."
@@ -57,7 +58,23 @@
   (interactive)
   (save-excursion
     (copy-region-as-kill (point)  (- (re-search-forward -qmlog-start-regex nil t 2) 14)))
-    (message "Copied message to buffer"))
+  (message "Copied message to buffer"))
+
+
+(require 's)
+(defun qmlog-hide (modulename)
+  (interactive (list
+                (read-string (format "Don't show logs from module [%s]: " (thing-at-point 'word))
+                             nil nil (thing-at-point 'word))))
+
+  (add-to-list '-qmlog-hidden-logs modulename)
+  
+  (hide-lines-show-all)
+  
+  (let ((start (concat -qmlog-start-regex " \\[" (s-join "\\|" -qmlog-hidden-logs) "\\]"))
+	(end -qmlog-start-regex))
+    (hide-blocks-matching start end))
+  )
 
 
 (defun qmlog-filter (modulename)
@@ -69,7 +86,7 @@
   (hide-lines-show-all)
   (let ((start (concat -qmlog-start-regex " \\[" modulename "\\]"))
 	(end -qmlog-start-regex))
-  (hide-blocks-not-matching start end)))
+    (hide-blocks-not-matching start end)))
 
 (defvar qmlog/old-mode-string)
 (defvar qmlog/new-mode-string)
@@ -78,6 +95,7 @@
   "Clear all filters."
   (interactive)
   (hide-lines-show-all)
+  (setq -qmlog-hidden-logs '())
   (setq mode-line-format qmlog/old-mode-string))
 
 
@@ -87,6 +105,7 @@
   (define-key qmlog-mode-map (kbd "n") 'qmlog-next-line)
   (define-key qmlog-mode-map (kbd "c") 'qmlog-copy-log-message)
   (define-key qmlog-mode-map (kbd "f") 'qmlog-filter)
+  (define-key qmlog-mode-map (kbd "k") 'qmlog-hide)
   (define-key qmlog-mode-map (kbd "a") 'qmlog-reset-filter)
   (define-key qmlog-mode-map (kbd "q") 'qmlog-reset-filter))
 
