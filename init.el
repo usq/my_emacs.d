@@ -81,10 +81,13 @@
 
 (use-package swift-mode :defer t)
 
-(use-package yasnippet :defer t :ensure t
+(use-package yasnippet :defer t
   :config
   (setq yas-snippet-dirs
 	'("~/.emacs.d/snippets")))
+
+(use-package elfeed
+  :defer t)
 
 (use-package company
   :bind
@@ -180,7 +183,7 @@
   (dimmer-mode))
 
 (use-package org
-  :ensure t        ; But it comes with Emacs now!?
+  :ensure t
   :init
   (setq org-use-speed-commands t
         org-return-follows-link t
@@ -229,20 +232,6 @@
   (add-hook 'org-shiftdown-final-hook 'windmove-down)
   (add-hook 'org-shiftright-final-hook 'windmove-right))
 
-;; fix org table layout
-(defun my-org-clocktable-indent-string (level)
-  (if (= level 1)
-      ""
-    (let ((str "^"))
-      (while (> level 2)
-        (setq level (1- level)
-              str (concat str "--")))
-      (concat str "-> "))))
-(advice-add 'org-clocktable-indent-string :override #'my-org-clocktable-indent-string)
-
-
-(use-package dash  :defer t)
-(use-package request :defer t)
 
 ;;;; look at https://www.suenkler.info/notes/emacs-config/
 (use-package neotree
@@ -269,11 +258,6 @@
   ("C-c p f" . projectile-find-file)
   ("C-c p p" . projectile-switch-project))
 
-(use-package wolfram
-  :defer t
-  :config
-  (setq wolfram-alpha-app-id "7L7LE4-HHWQGE9TG6"))
-
 (use-package powerline
   :disabled t
   :ensure t
@@ -281,7 +265,6 @@
   (powerline-default-theme))
 
 (use-package rainbow-delimiters)
-
 
 ;;;; follow-mode!!!!!!!!!!!!!!!!!
 
@@ -383,7 +366,6 @@
              ("i" . dired-subtree-insert)
              (";" . dired-subtree-remove)))
 
-;; checkout https://github.com/Kungsgeten/org-brain/blob/master/README.org
 
 (use-package moody
   :config
@@ -396,11 +378,19 @@
 
 (use-package minions)
 
+(use-package lua-mode
+  :defer t)
+
+(use-package eziam-theme
+  :defer t)
+
 (require 'server)
 (add-hook 'after-init-hook (lambda ()
                              (unless (or (daemonp) (server-running-p))
                                (server-start)
                                (setq server-raise-frame t))))
+
+
 
 
 (global-auto-revert-mode 1)
@@ -426,6 +416,11 @@
 
 ;;; speedup next-line
 (setq line-move-visual nil)
+
+;; disable fucking changelog-mode (this fucks up our changelogs)
+(rassq-delete-all 'change-log-mode auto-mode-alist)
+
+
 
 (mc-orga)
 

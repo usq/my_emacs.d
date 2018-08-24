@@ -1,9 +1,11 @@
+;;; kaylee-mode
 (require 'subr-x)
 (require 'cl-lib)
 (require 'comint)
 (require 'seq)
 (require 's)
 
+;;; Code:
 (define-derived-mode kaylee-mode comint-mode "Inferior Kaylee"
   "Major mode for Kaylee inferior process."
   (setq-local indent-tabs-mode nil)
@@ -15,6 +17,8 @@
   (define-key kaylee-mode-map (kbd "RET") nil)
   (define-key kaylee-mode-map (kbd "C-c C-c") (lambda ()
 						(interactive) (kaylee-fix)))
+  (define-key kaylee-mode-map (kbd "C-c C-o") (lambda ()
+						(interactive) (kaylee-fix-override)))
   (define-key kaylee-mode-map (kbd "C-c f") (lambda ()
 					      (interactive) (kaylee-fix)))
   (define-key kaylee-mode-map (kbd "C-c m") (lambda ()
@@ -35,21 +39,21 @@
 
   
   (setq-local kaylee-font-lock-keywords
-      (let ((keywords '("~>" "==" ">=")))
-        (let (
-              (keywords-regexp  (regexp-opt keywords 'words))
-              (fw-pf-regexp      "^\\([.a-zA-Z-0-9\\/]+\\) +\\([a-zA-Z-]+\\) +\\(src:\\|~>\\|==\\|>=\\) *\\([.a-zA-Z0-9_/-]+\\)")
-              (comments-regexp1 "#.*")
-              (comments-regexp2 "//.*")
-              )
-          `(
-            (,fw-pf-regexp . (1 font-lock-type-face))
-            (,fw-pf-regexp . (2 font-lock-function-name-face))
-            (,comments-regexp1 . font-lock-comment-face)
-            (,comments-regexp2 . font-lock-comment-face)
-            (,fw-pf-regexp . (3 font-lock-keyword-face))
-            (,fw-pf-regexp . (4 font-lock-string-face))
-            ))))
+	      (let ((keywords '("~>" "==" ">=")))
+		(let (
+		      (keywords-regexp  (regexp-opt keywords 'words))
+		      (fw-pf-regexp      "^\\([.a-zA-Z-0-9\\/]+\\) +\\([a-zA-Z-]+\\) +\\(src:\\|~>\\|==\\|>=\\) *\\([.a-zA-Z0-9_/-]+\\)")
+		      (comments-regexp1 "#.*")
+		      (comments-regexp2 "//.*")
+		      )
+		  `(
+		    (,fw-pf-regexp . (1 font-lock-type-face))
+		    (,fw-pf-regexp . (2 font-lock-function-name-face))
+		    (,comments-regexp1 . font-lock-comment-face)
+		    (,comments-regexp2 . font-lock-comment-face)
+		    (,fw-pf-regexp . (3 font-lock-keyword-face))
+		    (,fw-pf-regexp . (4 font-lock-string-face))
+		    ))))
   
   ;; This disables editing and traversing the "=>" prompts
   (setq-local comint-prompt-read-only t)
@@ -161,7 +165,7 @@ Mframework:")
       (view-mode 1)
       (goto-char (point-min))))
 
-    (defun kaylee-why (platform fw)
+  (defun kaylee-why (platform fw)
     (interactive
      "Mplatform:
 Mframework:")
@@ -172,10 +176,10 @@ Mframework:")
       (goto-char (point-min))))
 
   (defun kaylee--read-lines (filePath)
-  "Return a list of lines of a file at FILEPATH."
-  (with-temp-buffer
-    (insert-file-contents filePath)
-    (split-string (buffer-string) "\n" t)))
+    "Return a list of lines of a file at FILEPATH."
+    (with-temp-buffer
+      (insert-file-contents filePath)
+      (split-string (buffer-string) "\n" t)))
 
   (defun kaylee--project-from-string (cat-str)
     (let* ((parts (s-split " " cat-str))
@@ -229,9 +233,9 @@ Mframework:")
   (defun --kaylee-current-branch-name (cat-str)
     (let* ((parts (s-split " " cat-str))
 	   (branchname (--kaylee-current-branch-name-at-path (concat "Serenity/Projects/" (second parts) "/" (first parts))
-			    ))
-	       (fwname (concat (first parts) " " (second parts) " src:" branchname))
-	       )
+							     ))
+	   (fwname (concat (first parts) " " (second parts) " src:" branchname))
+	   )
       
       `((name . ,(first parts))
 	(platform . ,(second parts))
@@ -240,8 +244,8 @@ Mframework:")
 
   (defun replace-src-dep-in-line-with-branch (line branch)
     (replace-regexp-in-string "src:[a-zA-Z0-9-_/]+" (lambda (match)
-							  (concat "src:" branch)
-							  )
+						      (concat "src:" branch)
+						      )
 			      line)
     )
 
@@ -276,24 +280,24 @@ Mframework:")
 	  (message "-> %s" project)))))
 
   
-(defun kaylee--query-user-for-selection (query fws)
-  (kaylee--open-selection (ido-completing-read query fws)))
+  (defun kaylee--query-user-for-selection (query fws)
+    (kaylee--open-selection (ivy-completing-read query fws)))
 
-(defun kaylee--open-selection (selection)
-  (let* ((selparts (s-split " " selection))
-	(fwname (first selparts))
-	(fwplatform (second selparts)))
-    (find-file-other-window (concat "Serenity/Projects/" fwplatform "/" fwname "/Catalyzer"))))
+  (defun kaylee--open-selection (selection)
+    (let* ((selparts (s-split " " selection))
+	   (fwname (first selparts))
+	   (fwplatform (second selparts)))
+      (find-file-other-window (concat "Serenity/Projects/" fwplatform "/" fwname "/Catalyzer"))))
 
-(defun kaylee-dirty-projects ()
-  "List projects where statis is not clean"
-  (interactive)
-  (let* ((fws (kaylee--src-fws-in-catalyzerfixed "Catalyzer.fixed"))
-	 (projects (mapcar #'kaylee--project-from-string fws))
-	 (dirty-repos (-filter #'kaylee--repo-dirty?  projects)))
-          (if (null dirty-repos)
-	      (message "No src dependency dirty!")
-	    (kaylee--query-user-for-selection "Select dirty repo:" (-map (lambda (r) (concat (cdr (assoc 'name r)) " " (cdr (assoc 'platform r)) " src:" (cdr (assoc 'branch r)))) dirty-repos)))))) ;; end kaylee-mode
+  (defun kaylee-dirty-projects ()
+    "List projects where statis is not clean"
+    (interactive)
+    (let* ((fws (kaylee--src-fws-in-catalyzerfixed "Catalyzer.fixed"))
+	   (projects (mapcar #'kaylee--project-from-string fws))
+	   (dirty-repos (-filter #'kaylee--repo-dirty?  projects)))
+      (if (null dirty-repos)
+	  (message "No src dependency dirty!")
+	(kaylee--query-user-for-selection "Select dirty repo:" (-map (lambda (r) (concat (cdr (assoc 'name r)) " " (cdr (assoc 'platform r)) " src:" (cdr (assoc 'branch r)))) dirty-repos)))))) ;; end kaylee-mode
 
 
 
@@ -323,7 +327,7 @@ Mframework:")
 
 (defun kaylee-run-tests ()
   (interactive)
-    (kaylee--run-tests "kaylee"))
+  (kaylee--run-tests "kaylee"))
 
 
 (defun kaylee-token ()

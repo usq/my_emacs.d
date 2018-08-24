@@ -234,6 +234,57 @@ MStartValue: ")
   (interactive)
   (text-scale-decrease 1))
 
+
+
+;; random elisp functions
+(require 's)
+(defun add-time (times)
+"""Add times in string list form. E.g. '("1:59:32" "1:57:01" "3:14:33") """
+  (let ((mins 
+	 (apply '+ 
+		(mapcar (lambda (e)
+			  (let ((els (s-split ":" e)))
+			    (+ (string-to-number (second els)) (* (string-to-number (first els)) 60))
+			    )
+			  )
+			times))))
+
+    (concat (number-to-string (/ mins 60)) ":" (number-to-string (% mins 60)))
+    )
+  )
+
+(defun generate-documentation ()
+  (interactive)
+  (let* ((filename (file-name-nondirectory (buffer-file-name)))
+	 (pdfname (concat (file-name-sans-extension filename) ".pdf"))
+	 (cmd (concat "PATH=$PATH:/Library/TeX/texbin pandoc -o " pdfname " " filename " && open " pdfname)))
+    (message cmd)
+    (shell-command cmd)
+    )
+  )
+
+
+(push
+ (cons
+  "docker"
+  '((tramp-login-program "docker")
+    (tramp-login-args (("exec" "-it") ("%h") ("/bin/bash")))
+    (tramp-remote-shell "/bin/sh")
+    (tramp-remote-shell-args ("-i") ("-c"))))
+ tramp-methods)
+
+(defadvice tramp-completion-handle-file-name-all-completions
+  (around dotemacs-completion-docker activate)
+  "(tramp-completion-handle-file-name-all-completions \"\" \"/docker:\" returns
+    a list of active Docker container names, followed by colons."
+  (if (equal (ad-get-arg 1) "/docker:")
+      (let* ((dockernames-raw (shell-command-to-string "docker ps | awk '$NF != \"NAMES\" { print $NF \":\" }'"))
+             (dockernames (cl-remove-if-not
+                           #'(lambda (dockerline) (string-match ":$" dockerline))
+                           (split-string dockernames-raw "\n"))))
+        (setq ad-return-value dockernames))
+    ad-do-it))
+
 (provide 'my-misc)
 ;;; my-misc ends here
 
