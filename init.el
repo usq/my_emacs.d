@@ -16,6 +16,11 @@
 
 (setq load-prefer-newer t)
 
+(use-package cargo)
+(use-package flycheck-rust)
+(use-package rustic)
+(use-package deferred)
+(use-package request)
 (require 'packages)
 (when (not (package-installed-p 'use-package))
     (package-refresh-contents)
@@ -123,13 +128,20 @@
 ;;ivy
 (use-package flx)
 (use-package ivy
-  :bind
-  (("M-x" . counsel-M-x))
   :config
-  (setq ivy-initial-inputs-alist nil)
-  (setq ivy-re-builders-alist
-	'((t . ivy--regex-fuzzy)))
-  )
+  (progn
+    (ivy-mode 1)
+    (setq ivy-use-virtual-buffers t)
+    (setq enable-recursive-minibuffers t)
+    (setq ivy-initial-inputs-alist nil)
+    (minibuffer-depth-indicate-mode 1)
+    (setq ivy-re-builders-alist
+	  '((t . ivy--regex-fuzzy))))
+  :bind
+  (("M-x" . counsel-M-x)
+   ("C-s" . swiper)
+   ("C-c C-r" . ivy-resume)))
+
 
 
 (use-package ace-jump-mode
@@ -141,6 +153,7 @@
    ("C-c j" . ace-jump-mode)))
 
 (use-package smartparens)
+(use-package smex) ;;for ivy command sorting
 (use-package direx)
 (use-package dirtree :defer t)
 
@@ -232,6 +245,11 @@
   (add-hook 'org-shiftdown-final-hook 'windmove-down)
   (add-hook 'org-shiftright-final-hook 'windmove-right))
 
+
+(use-package org-bullets
+  :ensure t
+  :config
+  (add-hook 'org-mode-hook 'org-bullets-mode))
 
 ;;;; look at https://www.suenkler.info/notes/emacs-config/
 (use-package neotree
