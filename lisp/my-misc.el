@@ -105,6 +105,7 @@ MStartValue: ")
 
 (defun gittower ()
   (interactive)
+  (debug)
   (let ((tries 0)
 	(found nil)
 	(dir (f-dirname (f-this-file))))

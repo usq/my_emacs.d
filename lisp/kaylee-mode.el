@@ -150,11 +150,28 @@ Mframework:")
     (interactive)
     (kaylee--run-cmd '("init" "framework")))
 
-
   (defun kaylee-fix ()
     (interactive)
     (kaylee--run-cmd '("fix")))
 
+  (url-hexify-string "fra/asd-d")
+
+  (defun -kaylee-branches (pf name)
+    (let* ((token (-kaylee-token))
+	   (curl-command (concat "curl -s -H \"PRIVATE-TOKEN: " token
+				 "\" https://git.quartett-mobile.de/api/v4/projects/frameworks%2F" pf "%2F" name
+				 "/repository/branches | jq '.[].name'"))
+	   (result (shell-command-to-string curl-command)))
+      (remove-if (lambda (x)
+		   (= 0 (length x)))
+		 (s-split "\n" (s-replace "\"" "" result)))
+      ))
+
+  (-kaylee-branches "apple" "aaf-xcconfig")
+  
+
+
+  
   (defun kaylee-info (platform fw open)
     (interactive
      "Mplatform:
@@ -164,6 +181,8 @@ Mframework:")
       (ansi-color-apply-on-region (point-min) (point-max))
       (view-mode 1)
       (goto-char (point-min))))
+
+
 
   (defun kaylee-why (platform fw)
     (interactive
@@ -275,8 +294,7 @@ Mframework:")
 	    (message "No src: dependency found for or no Catalyzer.fixed found")
 	  (progn
 	    (kill-whole-line)
-	    (insert (replace-src-dep-in-line-with-branch current-line (cdr (assoc 'branch project))))
-	    )
+	    (insert (replace-src-dep-in-line-with-branch current-line (cdr (assoc 'branch project)))) )
 	  (message "-> %s" project)))))
 
   
@@ -300,12 +318,7 @@ Mframework:")
 	(kaylee--query-user-for-selection "Select dirty repo:" (-map (lambda (r) (concat (cdr (assoc 'name r)) " " (cdr (assoc 'platform r)) " src:" (cdr (assoc 'branch r)))) dirty-repos)))))) ;; end kaylee-mode
 
 
-
-
 ;; toggle between catalyzers
-
-
-
 
 (require 'mc)
 (defun kaylee--run-tests (path-to-kaylee)
@@ -330,20 +343,21 @@ Mframework:")
   (kaylee--run-tests "kaylee"))
 
 
-(defun kaylee-token ()
-  (interactive)
-  (defun all-but-last (l)
+(defun -kaylee-token ()
+    (defun all-but-last (l)
     (reverse (cdr (reverse l))))
   
   (let* ((token (shell-command-to-string "security find-generic-password -g -a kaylee -s de.quartett-mobile.kaylee"))
 	 (pwline (first (split-string token "\n")))
 	 (replaced (replace-regexp-in-string "password: \\\"" "" pwline))
 	 (cleaned-up (join-string-list (reverse (cdr (reverse (split-string replaced "" t )))) ""))
-	 (cleaned-up2 (join-string-list  (all-but-last (split-string replaced "" t )) ""))
-	 )
+	 (cleaned-up2 (join-string-list  (all-but-last (split-string replaced "" t )) "")))
+    cleaned-up2))
 
-    (message "Copied token to clipboard")
-    (paste-to-osx cleaned-up2)))
+(defun kaylee-token ()
+  (interactive)
+  (paste-to-osx (-kaylee-token))
+  (message "Copied token to clipboard"))
 
 (provide 'kaylee-mode)
 
