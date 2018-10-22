@@ -105,11 +105,17 @@ MStartValue: ")
 
 (defun gittower ()
   (interactive)
-  (debug)
   (let ((tries 0)
 	(found nil)
-	(dir (f-dirname (f-this-file))))
-
+	(current-file (f-this-file))
+	(dir nil)
+	)
+    (if (null current-file)
+	(progn 
+	  (when (equal major-mode 'dired-mode)
+	    (setq dir (dired-current-directory)) ))
+	 (setq dir (f-dirname current-file))
+      )
     (while (and (< tries 5)
 		(null found))
       

@@ -5,10 +5,17 @@
 (use-package color-theme)
 
 (use-package snazzy-theme
-
+  :disabled t
   :ensure t
   :config
   (load-theme 'snazzy t))
+
+(use-package doom-themes
+  :config
+  (load-theme 'doom-one)
+  ;(load-theme 'doom-nord)
+  ;(load-theme 'doom-nord-light)
+  )
 
 (use-package panda-theme
   :disabled t

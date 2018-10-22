@@ -244,7 +244,7 @@
 	(setq ivy-re-builders-alist
 	      '((t . ivy--regex-fuzzy))))
       :bind
-      (("C-s" . swiper)
+      (("C-s" . swiper) ;; disable fuzzy once with M-r
        ("C-c C-r" . ivy-resume)))
 
 (use-package counsel
@@ -255,80 +255,83 @@
 (use-package smex) ;;for ivy command sorting
 
 (use-package smartparens)
-    (use-package company
-      :bind
-      ("C-," . company-complete-common)
-      :config
-      (add-hook 'after-init-hook 'global-company-mode))
+	(use-package company
+	  :bind
+	  ("C-," . company-complete-common)
+	  :config
+	  (add-hook 'after-init-hook 'global-company-mode))
 
 
-    (use-package paredit
-      :defer t
-      :diminish paredit-mode
-      :init
-      (add-hook 'clojure-mode-hook 'enable-paredit-mode)
-      (add-hook 'cider-repl-mode-hook 'enable-paredit-mode)
-      (add-hook 'lisp-mode-hook 'enable-paredit-mode)
-      (add-hook 'emacs-lisp-mode-hook 'enable-paredit-mode)
-      (add-hook 'lisp-interaction-mode-hook 'enable-paredit-mode)
-      (add-hook 'json-mode-hook 'enable-paredit-mode))
+	(use-package paredit
+	  :defer t
+	  :diminish paredit-mode
+	  :init
+	  (add-hook 'clojure-mode-hook 'enable-paredit-mode)
+	  (add-hook 'cider-repl-mode-hook 'enable-paredit-mode)
+	  (add-hook 'lisp-mode-hook 'enable-paredit-mode)
+	  (add-hook 'emacs-lisp-mode-hook 'enable-paredit-mode)
+	  (add-hook 'lisp-interaction-mode-hook 'enable-paredit-mode)
+	  (add-hook 'json-mode-hook 'enable-paredit-mode))
 
-    (use-package swift-mode :defer t)
+	(use-package swift-mode :defer t)
 
-    (use-package yasnippet :defer t
-      :config
-      (setq yas-snippet-dirs
-	    '("~/.emacs.d/snippets")))
+	(use-package yasnippet :defer t
+	  :config
+	  (setq yas-snippet-dirs
+		'("~/.emacs.d/snippets")))
 
-    (use-package restclient)
-    (use-package company-restclient)
-    (use-package json-snatcher :defer t)
+	(use-package restclient)
+	(use-package company-restclient)
+	(use-package json-snatcher :defer t)
 
-    (use-package cmake-mode)
+	(use-package cmake-mode)
+(use-package ag)
 
 (use-package direx)
-(use-package dirtree :defer t)
+    (use-package dirtree :defer t)
 
-(use-package flycheck
-  :ensure t
-  :init (global-flycheck-mode)
-  :config
-  (unbind-key "C-c +" flycheck-mode-map))
-
-
-
-(use-package exec-path-from-shell
-  :config
-  (exec-path-from-shell-initialize))
+    (use-package flycheck
+      :ensure t
+      :init (global-flycheck-mode)
+      :config
+      (unbind-key "C-c +" flycheck-mode-map))
 
 
-(use-package rotate :defer t)
+
+    (use-package exec-path-from-shell
+      :config
+      (exec-path-from-shell-initialize))
 
 
-(use-package try)
-(use-package yafolding)
-(use-package sgml-mode  :defer t)
-(use-package neotree
-  :config (setq neo-window-width 40 
-		neo-smart-open t 
-		neo-theme 'arrow)
-  :bind ("C-c t" . neotree))
-(use-package which-key
-  :config
-  (which-key-mode))
+    (use-package rotate :defer t)
 
-(use-package ace-window
-  :init
-   (progn
-    (global-set-key [remap other-window] 'ace-window)
-    (custom-set-faces
-     '(aw-leading-char-face
-       ((t (:inherit ace-jump-face-foreground :height 3.0)))))))
 
-(use-package elfeed :defer t)
-(use-package simple-httpd)
-(use-package reveal-in-osx-finder :defer t)
-(use-package shell-pop :defer t)
+    (use-package try)
+    (use-package yafolding)
+    (use-package sgml-mode  :defer t)
+;;for neo tree
+(use-package all-the-icons)
+    (use-package neotree
+      :config (setq neo-window-width 40 
+		    neo-smart-open t 
+		    neo-theme 'icons)
+      :bind ("C-c t" . neotree))
+    (use-package which-key
+      :config
+      (which-key-mode))
+
+    (use-package ace-window
+      :init
+       (progn
+	(global-set-key [remap other-window] 'ace-window)
+	(custom-set-faces
+	 '(aw-leading-char-face
+	   ((t (:inherit ace-jump-face-foreground :height 3.0)))))))
+
+    (use-package elfeed :defer t)
+    (use-package simple-httpd)
+    (use-package reveal-in-osx-finder :defer t)
+    (use-package shell-pop :defer t)
 
 (setq load-prefer-newer t)
 (add-to-list 'load-path (concat user-emacs-directory "lisp/"))
@@ -527,6 +530,10 @@
   (setq explicit-shell-file-name "bash"))
 
 (use-package docker-tramp)
+
+(define-key emacs-lisp-mode-map (kbd "C-c C-c") 'eval-defun)
+
+(global-set-key (kbd "C-h C-f") 'find-function)
 
 ;; ebook reader
 (use-package nov)

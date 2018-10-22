@@ -50,7 +50,11 @@
              (";" . dired-subtree-remove)))
 
 
+(require 'doom-modeline)
+(+doom-modeline|init)
+
 (use-package moody
+  :disabled t
   :config
   (setq moody-slant-function 'moody-slant-apple-rgb)
   (setq x-underline-at-descent-line t)
