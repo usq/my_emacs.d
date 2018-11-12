@@ -26,6 +26,7 @@
 (global-unset-key (kbd "C-j"))
 (global-unset-key (kbd "C-j"))
 (global-set-key (kbd "C-j") 'ace-jump-char-mode)
+(global-set-key (kbd "C-.") 'ace-jump-char-mode)
 
 
 

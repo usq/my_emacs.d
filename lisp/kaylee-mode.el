@@ -42,7 +42,7 @@
 	      (let ((keywords '("~>" "==" ">=")))
 		(let (
 		      (keywords-regexp  (regexp-opt keywords 'words))
-		      (fw-pf-regexp      "^\\([.a-zA-Z-0-9\\/]+\\) +\\([a-zA-Z-]+\\) +\\(src:\\|~>\\|==\\|>=\\) *\\([.a-zA-Z0-9_/-]+\\)")
+		      (fw-pf-regexp      "^\\([.a-zA-Z-0-9\\/]+\\)[ \t]+\\([a-zA-Z-]+\\)[ \t]+\\(src:\\|~>\\|==\\|>=\\)[ \t]*\\([.a-zA-Z0-9_/-]+\\)")
 		      (comments-regexp1 "#.*")
 		      (comments-regexp2 "//.*")
 		      )
