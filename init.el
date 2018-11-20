@@ -14,6 +14,10 @@
 	     '("melpa" . "https://melpa.org/packages/"))
 (package-initialize)
 
+(setq auto-window-vscroll nil)
+
+
+
 (unless (package-installed-p 'use-package)
   (package-refresh-contents)
   (package-install 'use-package))
