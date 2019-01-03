@@ -36,21 +36,17 @@
      ("#20240E" . 100))))
  '(ido-use-faces nil)
  '(ispell-highlight-face (quote flyspell-incorrect))
+ '(jdee-db-active-breakpoint-face-colors (cons "#1B2229" "#51afef"))
+ '(jdee-db-requested-breakpoint-face-colors (cons "#1B2229" "#98be65"))
+ '(jdee-db-spec-breakpoint-face-colors (cons "#1B2229" "#3f444a"))
  '(magit-diff-use-overlays nil)
  '(magit-log-arguments (quote ("--graph" "--color" "--decorate" "-n256")))
  '(mc/always-run-for-all t)
  '(moody-mode-line-height 23)
- '(org-agenda-files (quote ("~/dev/QM/qm.org" "~/dev/QM/orga/projects.org")))
- '(org-capture-templates
-   (quote
-    (("i" "file to inbox" entry
-      (file+headline "~/Dropbox/org/file-this.org" "Inbox")
-      ""))))
- '(org-default-notes-file "~/Dropbox/org/file-this.org")
  '(org-support-shift-select nil)
  '(package-selected-packages
    (quote
-    (magit nov shrink-path evil-anzu eldoc-eval doom-themes ag irony counsel counsel-mode auto-package-update try company-restclient org-bullets rustic flycheck-rust cargo smex eziam-theme elfeed lua lua-mode yafolding f ido-completing-read+ cider minions moody shell-pop dired-subtree dired-plus ibuffer-vc ibuffer-projectile dired+ snazzy-theme asoc fireplace irony-server docker panda-theme groovy-mode kotlin-imenu kotlin-mode flycheck-kotlin dimmer angular-mode typescript-mode markdown-preview-mode tidy s slack json-reformat ace-window logview org zen-mode rainbow-delimiters rainbow-delimiter base16-theme landmark emacs-home json-snatcher hilight-symbol highlight-symbol hilight-symbol-mode light-symbol light-symbol-mode tea-time aggressive-indent agressive-indent agressive-indent-mode rotate emacs-rotate color-theme spacemacs-theme xquery-mode spotify-el spotify helm-spotify color-theme-sanityinc-tomorrow powerline company-jedi projectile google-this sgml flycheck Flycheck dirtree gitignore-mode exec-path-from-shell cmake-mode sublimity-scroll sublimity slime multiple-cursors mc-mode multiple-cursor-mode yasnippet company-sourcekit company browse-kill-ring js2-mode undo-tree tex auctex-latexmk auctex djinni-mode reveal-in-osx-finder direx dired-x use-package simple-httpd restclient paradox beacon smartparens monokai-theme paredit ido-vertical-mode ido-at-point flx-ido ace-jump-mode)))
+    (ycmd-eldoc company-ycmd ycmd hydra magit nov shrink-path evil-anzu eldoc-eval doom-themes ag irony counsel counsel-mode auto-package-update try company-restclient org-bullets rustic flycheck-rust cargo smex eziam-theme elfeed lua lua-mode yafolding f ido-completing-read+ cider minions moody shell-pop dired-subtree dired-plus ibuffer-vc ibuffer-projectile dired+ snazzy-theme asoc fireplace irony-server docker panda-theme groovy-mode kotlin-imenu kotlin-mode flycheck-kotlin dimmer angular-mode typescript-mode markdown-preview-mode tidy s slack json-reformat ace-window logview org zen-mode rainbow-delimiters rainbow-delimiter base16-theme landmark emacs-home json-snatcher hilight-symbol highlight-symbol hilight-symbol-mode light-symbol light-symbol-mode tea-time aggressive-indent agressive-indent agressive-indent-mode rotate emacs-rotate color-theme spacemacs-theme xquery-mode spotify-el spotify helm-spotify color-theme-sanityinc-tomorrow powerline company-jedi projectile google-this sgml flycheck Flycheck dirtree gitignore-mode exec-path-from-shell cmake-mode sublimity-scroll sublimity slime multiple-cursors mc-mode multiple-cursor-mode yasnippet company-sourcekit company browse-kill-ring js2-mode undo-tree tex auctex-latexmk auctex djinni-mode reveal-in-osx-finder direx dired-x use-package simple-httpd restclient paradox beacon smartparens monokai-theme paredit ido-vertical-mode ido-at-point flx-ido ace-jump-mode)))
  '(pcomplete-ignore-case t)
  '(pos-tip-background-color "#A6E22E")
  '(pos-tip-foreground-color "#272822")
@@ -91,7 +87,7 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(default ((t (:inherit nil :stipple nil :background "#292A2B" :foreground "#E6E6E6" :inverse-video nil :box nil :strike-through nil :overline nil :underline nil :slant normal :weight normal :height 120 :width normal :foundry "nil" :family "Fira Mono"))))
+ '(default ((t (:inherit nil :stipple nil :background "#292A2B" :foreground "#E6E6E6" :inverse-video nil :box nil :strike-through nil :overline nil :underline nil :slant normal :weight normal :height 130 :width normal :foundry "nil" :family "Fira Mono"))))
  '(aw-leading-char-face ((t (:inherit ace-jump-face-foreground :height 3.0))))
  '(cider-fringe-good-face ((t (:background "green4" :foreground "light green"))))
  '(company-scrollbar-fg ((t (:background "gray55"))))

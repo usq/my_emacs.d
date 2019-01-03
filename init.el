@@ -4,6 +4,7 @@
 
 ;; https://www.reddit.com/r/emacs/comments/3kqt6e/2_easy_little_known_steps_to_speed_up_emacs_start/
 (defvar mc/gc-cons-threshold--orig gc-cons-threshold)
+
 (setq gc-cons-threshold (* 100 1024 1024)) ;100 MB before garbage collection
 (setq message-log-max 10000)
 
@@ -54,11 +55,11 @@
              (";" . dired-subtree-remove)))
 
 
-(require 'doom-modeline)
-(+doom-modeline|init)
+;;(require 'doom-modeline)
+;;(+doom-modeline|init)
 
 (use-package moody
-  :disabled t
+  ;:disabled t
   :config
   (setq moody-slant-function 'moody-slant-apple-rgb)
   (setq x-underline-at-descent-line t)
@@ -114,6 +115,7 @@
 
 
 (mc-orga)
+;;(mc-cpp)
 
 ; (setq browse-url-browser-function 'eww-browse-url)
 ;; (set-frame-font "DejaVu Sans Mono-14" nil t)

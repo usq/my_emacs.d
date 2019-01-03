@@ -20,8 +20,6 @@
 
 (setq ns-pop-up-frames nil)
 
-(desktop-save-mode 1)
-
 (setq show-paren-delay 0.125)
 (show-paren-mode 1)
 
@@ -213,12 +211,44 @@
 (use-package flycheck-kotlin)
 (use-package kotlin-mode)
 
+(use-package ycmd
+  :ensure t
+  :config
+  (set-variable 'ycmd-server-command '("python" "/Users/michaelconrads/dev/lab/ycmd/ycmd"))
+
+  (add-hook 'c++-mode-hook 'ycmd-mode)
+
+  )
+
+(require 'ycmd)
+(require 'ycmd-eldoc)
+(add-hook 'ycmd-mode-hook 'ycmd-eldoc-setup)
+(set-variable 'ycmd-extra-conf-whitelist '("~/.ycm_extra_conf.py"))
+(set-variable 'ycmd-global-config "~/.ycm_extra_conf.py")
+(setq request-message-level -1  url-show-status nil)
+
+(use-package company-ycmd
+  :ensure t
+  :init (company-ycmd-setup)
+  :config (add-to-list 'company-backends 'company-ycmd))
+
+
+
 (use-package irony
   :ensure t
-  :hook (c-mode . irony-mode))
+  :disabled t
+  :hook 
+					;	(c-mode . irony-mode)
+					;	(c++-mode . irony-mode)
+
+					;      :init
+					;      (set-variable ' ymcd-server-command )
+
+  )
 
 (use-package company-irony
   :ensure t
+  :disabled t
   :config
   (add-to-list 'company-backends 'company-irony))
 
@@ -252,7 +282,8 @@
   :bind
   (("M-x" . counsel-M-x)))
 
-(use-package smex) ;;for ivy command sorting
+(use-package smex
+  :ensure t) ;;for ivy command sorting
 
 (use-package smartparens)
 	(use-package company
@@ -356,75 +387,111 @@
   ("C-c h" . hs-toggle-hiding))
 
 (use-package org
-  :ensure t
-  :init
-  (setq org-use-speed-commands t
-	org-return-follows-link t
-	org-hide-emphasis-markers t
-	;;        org-completion-use-ido t
-	org-outline-path-complete-in-steps nil
-	org-src-fontify-natively t   ;; Pretty code blocks
-	org-src-tab-acts-natively t
-	org-confirm-babel-evaluate nil
-	org-agenda-ndays 7
-	org-clock-in-resume t
-	org-clock-report-include-clocking-task t
-	org-agenda-window-setup 'current-window
-	org-agenda-span 1 ;;start agenda in day instead week
-	org-todo-keywords '((sequence "TODO(t)" "|" "DOING(g)" "WAITING(w)" "|" "DONE(d)")
-			    (sequence "|" "CANCELED(c)")))
-  (add-to-list 'auto-mode-alist '("\\.txt\\'" . org-mode))
-  :bind
-  (("C-c l" . org-store-link)
-   ("C-c c" . org-capture))
-  :config
-  ;; we use C-c + for org-mode-map
-  (unbind-key "C-c +" org-mode-map)
-  (unbind-key "C-c -" org-mode-map)
-  (unbind-key "<S-left>" org-mode-map)
-  (unbind-key "<S-right>" org-mode-map)
-  (unbind-key "<S-up>" org-mode-map)
-  (unbind-key "<S-down>" org-mode-map)
-  (unbind-key "C-," org-mode-map) ;; I use this for company
-  (define-key org-mode-map [remap org-return] (lambda () (interactive)
-						(if (org-in-src-block-p)
-						    (org-return)
-						  (org-return-indent))))
-  (org-babel-do-load-languages
-   'org-babel-load-languages
-   '((python . t)
-     (dot . t)
-     (latex . t)
-     ))
+	    :ensure t
+	    :bind
+	    (("C-c l" . org-store-link)
+	     ("C-c c" . org-capture))
 
-  (add-hook 'org-mode-hook 'jira-link-mode)
-  ;; Make windmove work in org-mode:
-  (add-hook 'org-shiftup-final-hook 'windmove-up)
-  (add-hook 'org-shiftleft-final-hook 'windmove-left)
-  (add-hook 'org-shiftdown-final-hook 'windmove-down)
-  (add-hook 'org-shiftright-final-hook 'windmove-right)
+	    :config
+(message "loading config org")
+	    (setq org-use-speed-commands t
+		  org-return-follows-link t
+		  org-hide-emphasis-markers t
+		  org-outline-path-complete-in-steps nil
+		  org-src-fontify-natively t   ;; Pretty code blocks
+		  org-src-tab-acts-natively t
+		  org-confirm-babel-evaluate nil
+		  org-agenda-ndays 7
+		  org-clock-in-resume t
+		  org-clock-report-include-clocking-task t
+		  org-agenda-window-setup 'current-window
+		  org-agenda-files (append (file-expand-wildcards "~/dev/org/*.org") '("~/dev/QM/qm.org" "~/dev/QM/orga/projects.org"))
+		  org-agenda-span 1 ;;start agenda in day instead week
+		  org-todo-keywords '((sequence "TODO(t)" "|" "DOING(g)" "WAITING(w)" "|" "DONE(d)")
+				      (sequence "WAITING(w@/!)" "HOLD(h@/!)" "|" "CANCELLED(c@/!)" "PHONE" "MEETING"))
 
-  ;; fix org table layout
-  (defun my-org-clocktable-indent-string (level)
-    (if (= level 1)
-	""
-      (let ((str "^"))
-	(while (> level 2)
-	  (setq level (1- level)
-		str (concat str "--")))
-	(concat str "-> "))))
-  (advice-add 'org-clocktable-indent-string :override #'my-org-clocktable-indent-string)
+		  org-todo-keyword-faces '(("TODO" :foreground "red" :weight bold)
+					   ("NEXT" :foreground "blue" :weight bold)
+					   ("DONE" :foreground "forest green" :weight bold)
+					   ("WAITING" :foreground "orange" :weight bold)
+					   ("HOLD" :foreground "magenta" :weight bold)
+					   ("CANCELLED" :foreground "forest green" :weight bold)
+					   ("MEETING" :foreground "forest green" :weight bold)
+					   ("PHONE" :foreground "forest green" :weight bold))
 
-  )
+		  org-default-notes-file  "~/dev/org/refile.org"
+		  org-capture-templates '(("t" "todo" entry (file "~/dev/org/refile.org")          "* TODO hello %?\n%U\n%a\n" :clock-in t :clock-resume t)
+					  ("n" "note" entry (file "~/dev/org/refile.org")          "* %? :NOTE:\n%U\n%a\n" :clock-in t :clock-resume t)
+					  ("w" "org-protocol" entry (file "~/dev/org/refile.org")  "* TODO Review %c\n%U\n" :immediate-finish t)
+					  ("m" "Meeting" entry (file "~/dev/org/refile.org")	   "* MEETING with %? :MEETING:\n%U" :clock-in t :clock-resume t)
+					  )
 
+		  )
+	    (add-to-list 'auto-mode-alist '("\\.txt\\'" . org-mode))
+
+	    ;; we use C-c + for org-mode-map
+	    (unbind-key "C-c +" org-mode-map)
+	    (unbind-key "C-c -" org-mode-map)
+	    (unbind-key "<S-left>" org-mode-map)
+	    (unbind-key "<S-right>" org-mode-map)
+	    (unbind-key "<S-up>" org-mode-map)
+	    (unbind-key "<S-down>" org-mode-map)
+	    (unbind-key "C-," org-mode-map) ;; I use this for company
+	    (define-key org-mode-map [remap org-return] (lambda () (interactive)
+							  (if (org-in-src-block-p)
+							      (org-return)
+							    (org-return-indent))))
+
+
+
+
+	    (org-babel-do-load-languages
+	     'org-babel-load-languages
+	     '((python . t)
+	       (dot . t)
+	       (latex . t)
+	       ))
+
+	    (add-hook 'org-mode-hook 'jira-link-mode)
+
+	    ;; Make windmove work in org-mode:
+	    (add-hook 'org-shiftup-final-hook 'windmove-up)
+	    (add-hook 'org-shiftleft-final-hook 'windmove-left)
+	    (add-hook 'org-shiftdown-final-hook 'windmove-down)
+	    (add-hook 'org-shiftright-final-hook 'windmove-right)
+
+	    (add-to-list 'org-structure-template-alist '("el" "#+BEGIN_SRC emacs-lisp\n\n#+END_SRC"))
+
+	    ;; fix org table layout
+	    (defun my-org-clocktable-indent-string (level)
+	      (if (= level 1)
+		  ""
+		(let ((str "^"))
+		  (while (> level 2)
+		    (setq level (1- level)
+			  str (concat str "--")))
+		  (concat str "-> "))))
+	    (advice-add 'org-clocktable-indent-string :override #'my-org-clocktable-indent-string)
+
+
+	    ;; Remove empty LOGBOOK drawers on clock out
+	    (defun bh/remove-empty-drawer-on-clock-out ()
+	      (interactive)
+	      (save-excursion
+		(beginning-of-line 0)
+		(org-remove-empty-drawer-at "LOGBOOK" (point))))
+
+	    (add-hook 'org-clock-out-hook 'bh/remove-empty-drawer-on-clock-out 'append))
 
 (use-package org-bullets
-  :ensure t
-  :config
-  (add-hook 'org-mode-hook 'org-bullets-mode))
+      :ensure t
+      :config
+      (add-hook 'org-mode-hook 'org-bullets-mode))
 
 (use-package projectile
   :ensure t
+  :config
+  (setq projectile-enable-caching t)
   :bind
   (
    ("C-c p f" . projectile-find-file)
@@ -465,8 +532,6 @@
   :defer t
   :bind
   ("C-c y" . browse-kill-ring))
-
-
 
 (use-package ibuffer
   :bind
@@ -522,6 +587,27 @@
 (require 'zen-mode)
 (require 'qmlog)
 (require 'mite-mode)
+
+(use-package hydra
+:bind
+(
+ ("C-c m" . mc/global-hydra-menu/body)
+
+)
+)
+
+(defhydra mc/global-hydra-menu (:color pink
+				       :hint nil)
+  "
+    ^foo^            ^second row^
+    ^^^^^-----------
+    _m_: message     _u_: foo
+
+    "
+  ("m" (message "hello"))
+  ("q" quit-window "quit" :color blue)
+  ("u" nil)
+  )
 
 (use-package docker
   :config

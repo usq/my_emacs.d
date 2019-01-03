@@ -207,6 +207,10 @@ MStartValue: ")
   (interactive)
   (find-file "~/dev/QM/qm.org"))
 
+(defun mc-cpp ()
+  (interactive)
+  (find-file "~/dev/lab/cpp/todo.org"))
+
 
 (defun snake_case-to-camelCase ()
   "Convert aa_bb to aaBb in region."
@@ -292,6 +296,32 @@ MStartValue: ")
         (setq ad-return-value dockernames))
     ad-do-it))
 
+(defun convert-to-hex (start end)
+  (interactive "r")
+  (when (= (string-to-char "[") (char-after start))
+      
+      (incf start)
+    )
+  (when (equalp (string-to-char "]") (char-before end))
+	   (decf end))
+
+  
+  (let* ( (content (buffer-substring-no-properties start end))
+	  (numbers (s-split "," content)))
+
+    (goto-char start)
+    (delete-region start end)
+    (insert 
+     (s-join ", " 
+	     (mapcar (lambda (x)
+		       (format "0x%x" 
+			       (string-to-number x)))
+		     numbers)))
+    
+    ))
+
+
 (provide 'my-misc)
 ;;; my-misc ends here
+
 
