@@ -5,20 +5,28 @@
   (auto-package-update-maybe))
 
 (fset 'display-startup-echo-area-message #'ignore)
-(fset 'yes-or-no-p #'y-or-n-p)
+	(fset 'yes-or-no-p #'y-or-n-p)
 
-(global-hl-line-mode t)
-(blink-cursor-mode -1)
-(setq visible-bell nil)
+    ;;    this KILLS performance in large files
+    ;;    (global-hl-line-mode t)
 
-(setq inhibit-startup-screen t)
-(setq inhibit-startup-message t)
-(setq ring-bell-function 'ignore)
 
-(if (fboundp 'tool-bar-mode) (tool-bar-mode -1))
-(if (fboundp 'scroll-bar-mode) (scroll-bar-mode -1))
+;;restore layout after ediff
+    (winner-mode) 
+    (add-hook 'ediff-after-quit-hook-internal 'winner-undo)
 
-(setq ns-pop-up-frames nil)
+
+	(blink-cursor-mode -1)
+	(setq visible-bell nil)
+
+	(setq inhibit-startup-screen t)
+	(setq inhibit-startup-message t)
+	(setq ring-bell-function 'ignore)
+
+	(if (fboundp 'tool-bar-mode) (tool-bar-mode -1))
+	(if (fboundp 'scroll-bar-mode) (scroll-bar-mode -1))
+
+	(setq ns-pop-up-frames nil)
 
 (setq show-paren-delay 0.125)
 (show-paren-mode 1)
@@ -261,26 +269,32 @@
   (("M-s" . avy-goto-char-2)
    ("C-c j" . avy-goto-char-2)))
 
-    (use-package flx)
-    (use-package ivy
-      :ensure t
-      :config
-      (progn
-	(ivy-mode 1)
-	(setq ivy-use-virtual-buffers t)
-	(setq enable-recursive-minibuffers t)
-	(setq ivy-initial-inputs-alist nil)
-	(minibuffer-depth-indicate-mode 1)
-	(setq ivy-re-builders-alist
-	      '((t . ivy--regex-fuzzy))))
-      :bind
-      (("C-s" . swiper) ;; disable fuzzy once with M-r
-       ("C-c C-r" . ivy-resume)))
+(use-package flx)
+(use-package ivy
+  :ensure t
+  :config
+  (progn
+    (ivy-mode 1)
+    (setq ivy-use-virtual-buffers t)
+    (setq enable-recursive-minibuffers t)
+    (setq ivy-initial-inputs-alist nil)
+    (minibuffer-depth-indicate-mode 1)
+    (setq ivy-re-builders-alist
+	  '((t . ivy--regex-fuzzy))))
+  :bind
+  (("C-s" . swiper) ;; disable fuzzy once with M-r
+   ("C-c C-r" . ivy-resume)))
 
 (use-package counsel
   :ensure t
   :bind
   (("M-x" . counsel-M-x)))
+
+(use-package counsel-tramp
+  :config
+  (setq tramp-default-method "ssh")
+  )
+
 
 (use-package smex
   :ensure t) ;;for ivy command sorting
@@ -319,50 +333,54 @@
 (use-package ag)
 
 (use-package direx)
-    (use-package dirtree :defer t)
+	  (use-package dirtree :defer t)
 
-    (use-package flycheck
-      :ensure t
-      :init (global-flycheck-mode)
-      :config
-      (unbind-key "C-c +" flycheck-mode-map))
-
-
-
-    (use-package exec-path-from-shell
-      :config
-      (exec-path-from-shell-initialize))
+	  (use-package flycheck
+	    :ensure t
+	    :init (global-flycheck-mode)
+	    :config
+	    (unbind-key "C-c +" flycheck-mode-map))
 
 
-    (use-package rotate :defer t)
+
+	  (use-package exec-path-from-shell
+	    :config
+	    (message "Calling exec-path-from-shell-initialize")
+	    (exec-path-from-shell-initialize)
+	    (message "PATH is now: %s" (getenv "PATH"))
+  )
 
 
-    (use-package try)
-    (use-package yafolding)
-    (use-package sgml-mode  :defer t)
-;;for neo tree
-(use-package all-the-icons)
-    (use-package neotree
-      :config (setq neo-window-width 40 
-		    neo-smart-open t 
-		    neo-theme 'icons)
-      :bind ("C-c t" . neotree))
-    (use-package which-key
-      :config
-      (which-key-mode))
+	  (use-package rotate :defer t)
 
-    (use-package ace-window
-      :init
-       (progn
-	(global-set-key [remap other-window] 'ace-window)
-	(custom-set-faces
-	 '(aw-leading-char-face
-	   ((t (:inherit ace-jump-face-foreground :height 3.0)))))))
 
-    (use-package elfeed :defer t)
-    (use-package simple-httpd)
-    (use-package reveal-in-osx-finder :defer t)
-    (use-package shell-pop :defer t)
+	  (use-package try)
+	  (use-package yafolding)
+	  (use-package sgml-mode  :defer t)
+      ;;for neo tree
+      (use-package all-the-icons)
+	  (use-package neotree
+	    :config (setq neo-window-width 40 
+			  neo-smart-open t 
+			  neo-theme 'icons)
+	    :bind ("C-c t" . neotree))
+	  (use-package which-key
+	    :config
+	    (which-key-mode))
+(use-package ace-jump-mode)
+
+	  (use-package ace-window
+	    :init
+	     (progn
+	      (global-set-key [remap other-window] 'ace-window)
+	      (custom-set-faces
+	       '(aw-leading-char-face
+		 ((t (:inherit ace-jump-face-foreground :height 3.0)))))))
+
+	  (use-package elfeed :defer t)
+	  (use-package simple-httpd)
+	  (use-package reveal-in-osx-finder :defer t)
+	  (use-package shell-pop :defer t)
 
 (setq load-prefer-newer t)
 (add-to-list 'load-path (concat user-emacs-directory "lisp/"))
@@ -490,8 +508,6 @@
 
 (use-package projectile
   :ensure t
-  :config
-  (setq projectile-enable-caching t)
   :bind
   (
    ("C-c p f" . projectile-find-file)
@@ -549,6 +565,21 @@
   ("C-x u" . undo-tree-visualize)
   ("C-?" . undo-tree-redo))
 
+;;(require 'doom-modeline)
+;;(+doom-modeline|init)
+
+(use-package moody
+  ;:disabled t
+  :config
+  (setq moody-slant-function 'moody-slant-apple-rgb)
+  (setq x-underline-at-descent-line t)
+  (setq moody-mode-line-height 20)
+  (moody-replace-mode-line-buffer-identification)
+  (moody-replace-vc-mode))
+
+(use-package minions)
+
+(require 'eyedropper)
 (require 'themes)
 (require 'mac)
 (require 'tex)

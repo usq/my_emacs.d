@@ -13,11 +13,14 @@
 (setq reftex-plug-into-AUCTeX t)
 (setq TeX-PDF-mode t)
 
-(setenv "PATH"
-        (concat
-         "/Library/TeX/texbin" ":"
 
-         (getenv "PATH")))
+;; this clashes with tramp maybe?
+;; (setenv "PATH"
+;;         (concat
+;;          "/Library/TeX/texbin" ":"
+;;          (getenv "PATH")))
+
+
 
 ;; Use Skim as viewer, enable source <-> PDF sync
 ;; make latexmk available via C-c C-c

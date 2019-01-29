@@ -4,6 +4,24 @@
 
 (use-package color-theme)
 
+(use-package solarized-theme
+  :ensure t
+   :config
+  (load-theme 'solarized-light t)
+  (let ((line (face-attribute 'mode-line :underline)))
+    (set-face-attribute 'mode-line          nil :overline   line)
+    (set-face-attribute 'mode-line-inactive nil :overline   line)
+    (set-face-attribute 'mode-line-inactive nil :underline  line)
+    (set-face-attribute 'mode-line          nil :box        nil)
+    (set-face-attribute 'mode-line-inactive nil :box        nil)
+    (set-face-attribute 'mode-line-inactive nil :background "#f9f2d9")))
+
+
+
+(use-package eziam-theme
+  :disabled t
+  :defer t)
+
 (use-package snazzy-theme
   :disabled t
   :ensure t
@@ -11,8 +29,8 @@
   (load-theme 'snazzy t))
 
 (use-package doom-themes
-  :config
-  (load-theme 'doom-one)
+; :config
+;  (load-theme 'doom-one)
   ;(load-theme 'doom-nord)
   ;(load-theme 'doom-nord-light)
   )

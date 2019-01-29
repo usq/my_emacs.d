@@ -55,26 +55,6 @@
              (";" . dired-subtree-remove)))
 
 
-;;(require 'doom-modeline)
-;;(+doom-modeline|init)
-
-(use-package moody
-  ;:disabled t
-  :config
-  (setq moody-slant-function 'moody-slant-apple-rgb)
-  (setq x-underline-at-descent-line t)
-  (setq moody-mode-line-height 20)
-  (moody-replace-mode-line-buffer-identification)
-  (moody-replace-vc-mode))
-
-
-(use-package minions)
-
-(use-package lua-mode
-  :defer t)
-
-(use-package eziam-theme
-  :defer t)
 
 (require 'server)
 (add-hook 'after-init-hook (lambda ()
